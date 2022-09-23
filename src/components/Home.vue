@@ -7,8 +7,6 @@
       <p class="ma-2">
         「デッキ入力」のセレクトボックスからモンスターカードを選択し、
         「追加」ボタンをクリックすることでカードが追加されます。<br />
-        セレクトボックスで選択する際、
-        カード名の一部を入力すると名前にその文字を含むモンスターカードの候補が表示されます。<br />
         カードを追加していくと、「スモールワールドの結果」にスモールワールドで検索できるカードを可視化したグラフ及び早見表が表示されます。
       </p>
     </div>
@@ -20,6 +18,7 @@
       <v-row>
         <!-- モンスター選択 -->
         <v-col cols="auto">
+          カード名の一部を入力すると、候補が出てくるので追加してください。
           <v-autocomplete
             v-model="selectMonster"
             :items="monsters"
@@ -31,7 +30,7 @@
         </v-col>
 
         <!-- モンスター情報 -->
-        <v-col>
+        <v-col class="d-none d-md-flex">
           <v-simple-table v-if="selectMonster" dense>
             <tbody>
               <tr>
@@ -84,6 +83,7 @@
             :items="deck"
             hide-default-footer
             disable-pagination
+            disable-sort
           >
             <template #[`item.delete`]="{ item }">
               <v-btn @click="deleteMonster(item)" color="primary">削除</v-btn>
@@ -106,7 +106,7 @@
     <v-container>
       <v-row>
         <v-col>
-          手札から除外するカードを限定する
+          サーチ元を限定する
           <v-list v-for="card in deck" :key="card.id">
             <v-checkbox
               v-model="filteredfirstNames"
@@ -155,26 +155,42 @@ cytoscape.use(dagre);
 export default {
   name: "Home",
   components: {},
+
+  computed: {
+    cardTableHeader() {
+      if (window.innerWidth < 700) {
+        return [
+          { text: "名前", value: "name" },
+          { text: "", value: "delete" },
+        ];
+      } else {
+        return [
+          { text: "名前", value: "name" },
+          { text: "種族", value: "type" },
+          { text: "属性", value: "attribute" },
+          { text: "レベル", value: "level" },
+          { text: "攻撃力", value: "attack" },
+          { text: "防御力", value: "defence" },
+          { text: "", value: "delete" },
+        ];
+      }
+    },
+
+    searchTableHeader() {
+      return [
+        { text: "サーチ元", value: "first" },
+        { text: "中継", value: "second" },
+        { text: "サーチ先", value: "third" },
+      ];
+    },
+  },
+
   data: () => ({
     test: null,
     monsters: monsters,
     selectMonster: null,
     deck: [],
     hideEdgeLabel: false,
-    cardTableHeader: [
-      { text: "名前", value: "name" },
-      { text: "種族", value: "type" },
-      { text: "属性", value: "attribute" },
-      { text: "レベル", value: "level" },
-      { text: "攻撃力", value: "attack" },
-      { text: "防御力", value: "defence" },
-      { text: "", value: "delete" },
-    ],
-    searchTableHeader: [
-      { text: "手札から除外するカード", value: "first" },
-      { text: "デッキから除外するカード", value: "second" },
-      { text: "サーチ先", value: "third" },
-    ],
     searchTable: [],
     searchTableSortBy: "third",
     filteredfirstNames: [], // サーチ元をフィルタする場合
