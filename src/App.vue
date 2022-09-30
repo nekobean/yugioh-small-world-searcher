@@ -2,6 +2,9 @@
   <v-app>
     <v-app-bar app color="primary" dark>
       スモールワールド検索ツール
+      <v-radio-group v-model="lang" mandatory row hide-details class="ml-5">
+        <v-radio v-for="x in langs" :key="x" :label="x" :value="x"></v-radio>
+      </v-radio-group>
 
       <v-spacer></v-spacer>
 
@@ -16,7 +19,7 @@
     </v-app-bar>
 
     <v-main>
-      <Home />
+      <Home :lang="lang" />
     </v-main>
   </v-app>
 </template>
@@ -27,5 +30,11 @@ import Home from "./components/Home.vue";
 export default {
   name: "App",
   components: { Home },
+  data() {
+    return {
+      lang: "jp",
+      langs: ["JP", "EN"],
+    };
+  },
 };
 </script>
