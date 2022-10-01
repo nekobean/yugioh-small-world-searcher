@@ -13,88 +13,70 @@
 
     <!-- デッキ入力 -->
     <h2 class="header-name">
-      {{ lang == "JP" ? "追加" : "Add Cards" }}
+      {{ lang == "JP" ? "モンスターを追加" : "Add Monaster" }}
     </h2>
     {{ test }}
     <v-container fluid>
+      <!-- キーワード入力 -->
       <v-row>
-        <!-- モンスター選択 -->
         <v-col cols="auto">
           {{
             lang == "JP"
               ? "カード名の一部を入力すると、候補が出てくるので追加してください。"
               : "Type part of the card name in English."
           }}
-
-          <v-autocomplete
-            v-model="selectMonster"
-            :items="monsters"
-            item-text="name"
-            return-object
+          <v-text-field
+            v-model="keyword"
+            label="カード検索"
             style="width: 500px"
-          ></v-autocomplete>
-          <v-btn @click="addMonster" color="primary">{{
-            lang == "JP" ? "追加" : "Add"
-          }}</v-btn>
-        </v-col>
-
-        <!-- モンスター情報 -->
-        <v-col class="d-none d-md-flex">
-          <v-simple-table v-if="selectMonster" dense>
-            <tbody>
-              <tr>
-                <th style="width: 150px">
-                  {{ lang == "JP" ? "カード名" : "Card Name" }}
-                </th>
-                <td>
-                  <template
-                    v-if="
-                      lang == 'JP' && selectMonster.name != selectMonster.ruby
-                    "
-                  >
-                    <!-- カード名と読みが異なる場合 -->
-                    <ruby>
-                      <rb>{{ selectMonster.name }}</rb>
-                      <rt>{{ selectMonster.ruby }}</rt>
-                    </ruby>
-                  </template>
-                  <template v-else>{{ selectMonster.name }}</template>
-                </td>
-              </tr>
-              <tr>
-                <th>{{ lang == "JP" ? "種族" : "Type" }}</th>
-                <td>{{ selectMonster.type }}</td>
-              </tr>
-              <tr>
-                <th>{{ lang == "JP" ? "属性" : "Attribute" }}</th>
-                <td>{{ selectMonster.attr }}</td>
-              </tr>
-              <tr>
-                <th>{{ lang == "JP" ? "レベル" : "Level" }}</th>
-                <td>{{ selectMonster.level }}</td>
-              </tr>
-              <tr>
-                <th>{{ lang == "JP" ? "攻撃力" : "Attack" }}</th>
-                <td>{{ selectMonster.attack }}</td>
-              </tr>
-              <tr>
-                <th>{{ lang == "JP" ? "防御力" : "Defence" }}</th>
-                <td>{{ selectMonster.defence }}</td>
-              </tr>
-              <tr>
-                <th>{{ lang == "JP" ? "テキスト" : "Text" }}</th>
-                <td>
-                  {{ selectMonster.text }}
-                </td>
-              </tr>
-            </tbody>
-          </v-simple-table>
+            clearable
+            hide-details
+            outlined
+            dense
+            @input="updateCandidates"
+          ></v-text-field>
         </v-col>
       </v-row>
+
+      <!-- 候補一覧 -->
+      <v-row>
+        <v-col cols="auto">
+          <v-data-table
+            v-if="candidates.length"
+            :headers="tableHeader('add')"
+            :items="candidates"
+            hide-default-footer
+            disable-pagination
+            dense
+          >
+            <template #[`item.name`]="{ item }">
+              <a
+                :href="`https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=${item.id}&request_locale=${lang}`"
+                target="_blank"
+              >
+                {{ item.name }}
+              </a>
+            </template>
+            <template #[`item.add`]="{ item }">
+              <v-btn @click="addMonster(item)" color="primary">{{
+                lang == "JP" ? "追加" : "Add"
+              }}</v-btn>
+            </template>
+          </v-data-table>
+        </v-col>
+      </v-row>
+    </v-container>
+
+    <!-- デッキ入力 -->
+    <h2 class="header-name">
+      {{ lang == "JP" ? "デッキ" : "Deck" }}
+    </h2>
+
+    <v-container fluid>
       <v-row>
         <v-col>
           <v-data-table
-            :headers="cardTableHeader"
+            :headers="tableHeader('delete')"
             :items="deck"
             hide-default-footer
             disable-pagination
@@ -163,7 +145,7 @@
 </template>
 
 <script>
-import monsters from "../assets/monsters.json";
+import monsters_origin from "../assets/monsters.json";
 import cytoscape from "cytoscape";
 import dagre from "cytoscape-dagre";
 
@@ -175,13 +157,16 @@ export default {
 
   watch: {
     lang: function (newVal, oldVal) {
-      this.selectMonster = "";
+      this.candidates = [];
       this.deck = [];
-      this.monsters = JSON.parse(JSON.stringify(monsters));
+      this.keyword = "";
+      this.monsters = JSON.parse(JSON.stringify(monsters_origin));
 
       if (newVal == "EN") {
         for (let monster of this.monsters) {
-          monster.name = monster.name_en;
+          if (monster.name_en) {
+            monster.name = monster.name_en;
+          }
         }
       }
 
@@ -190,44 +175,6 @@ export default {
   },
 
   computed: {
-    cardTableHeader() {
-      if (window.innerWidth < 700) {
-        if (this.lang == "JP") {
-          return [
-            { text: "名前", value: "name" },
-            { text: "", value: "delete" },
-          ];
-        } else {
-          return [
-            { text: "Name", value: "name" },
-            { text: "", value: "delete" },
-          ];
-        }
-      } else {
-        if (this.lang == "JP") {
-          return [
-            { text: "名前", value: "name" },
-            { text: "種族", value: "type" },
-            { text: "属性", value: "attr" },
-            { text: "レベル", value: "level" },
-            { text: "攻撃力", value: "attack" },
-            { text: "防御力", value: "defence" },
-            { text: "", value: "delete" },
-          ];
-        } else {
-          return [
-            { text: "Name", value: "name" },
-            { text: "Type", value: "type" },
-            { text: "Attribute", value: "attr" },
-            { text: "Level", value: "level" },
-            { text: "Attack", value: "attack" },
-            { text: "Defence", value: "defence" },
-            { text: "", value: "delete" },
-          ];
-        }
-      }
-    },
-
     searchTableHeader() {
       if (this.lang == "JP") {
         return [
@@ -249,14 +196,15 @@ export default {
 
   data: () => ({
     test: null,
-    selectMonster: "",
     deck: [],
     hideEdgeLabel: false,
     searchTable: [],
     searchTableSortBy: "third",
     filteredfirstNames: [], // サーチ元をフィルタする場合
     filteredthirdNames: [], // サーチ先をフィルタする場合
-    monsters: monsters,
+    monsters: monsters_origin,
+    candidates: [],
+    keyword: "",
 
     cy: {
       container: null,
@@ -293,33 +241,112 @@ export default {
 
   mounted: function () {
     this.cy.container = document.getElementById("cy");
-
-    // for (let monster of this.monsters) {
-    //   if (monster.name.includes("電脳")) {
-    //     this.selectMonster = monster;
-    //     this.addMonster();
-    //   }
-    //   if (monster.name.includes("うらら")) {
-    //     this.selectMonster = monster;
-    //     this.addMonster();
-    //   }
-    //   if (monster.name.includes("増殖")) {
-    //     this.selectMonster = monster;
-    //     this.addMonster();
-    //   }
-    // }
   },
 
   methods: {
-    addMonster() {
-      if (!this.selectMonster) return;
+    tableHeader(btnType) {
+      let headers = [];
 
+      if (this.lang == "JP") {
+        headers = [{ text: "名前", value: "name" }];
+      } else {
+        headers = [{ text: "Name", value: "name" }];
+      }
+
+      if (window.innerWidth > 700) {
+        if (this.lang == "JP") {
+          headers = [
+            { text: "名前", value: "name" },
+            { text: "種族", value: "type" },
+            { text: "属性", value: "attr" },
+            { text: "レベル", value: "level" },
+            { text: "攻撃力", value: "attack" },
+            { text: "防御力", value: "defence" },
+          ];
+        } else {
+          headers = [
+            { text: "Name", value: "name" },
+            { text: "Race", value: "type" },
+            { text: "Attribute", value: "attr" },
+            { text: "Level", value: "level" },
+            { text: "Attack", value: "attack" },
+            { text: "Defence", value: "defence" },
+          ];
+        }
+      }
+
+      if (btnType == "add") {
+        headers.push({ text: "", value: "add" });
+      } else {
+        headers.push({ text: "", value: "delete" });
+      }
+
+      return headers;
+    },
+
+    updateCandidates() {
+      this.candidates = [];
+
+      if (!this.keyword || this.keyword.trim() == "") {
+        return;
+      }
+
+      for (let monster of this.monsters) {
+        if (this.lang == "JP" && this.matchCardJP(monster, this.keyword)) {
+          this.candidates.push(monster);
+        } else if (
+          this.lang == "EN" &&
+          this.matchCardEN(monster, this.keyword)
+        ) {
+          this.candidates.push(monster);
+        }
+
+        if (this.candidates.length > 10) break;
+      }
+    },
+
+    kanaToHira(str) {
+      return str.replace(/[\u30a1-\u30f6]/g, function (match) {
+        let chr = match.charCodeAt(0) - 0x60;
+        return String.fromCharCode(chr);
+      });
+    },
+
+    matchCardJP(card, keyword) {
+      for (let word of keyword.split()) {
+        if (card.name.includes(word)) {
+          return true;
+        }
+
+        if (card.ruby.includes(word)) {
+          return true;
+        }
+
+        if (this.kanaToHira(card.ruby).includes(word)) {
+          return true;
+        }
+      }
+
+      return false;
+    },
+
+    matchCardEN(card, keyword) {
+      for (let word of keyword.split()) {
+        if (card.name.toLowerCase().includes(word.toLowerCase())) {
+          return true;
+        }
+      }
+
+      return false;
+    },
+
+    addMonster(monster) {
       let found = this.deck.find((x) => {
-        return x.name === this.selectMonster.name;
+        return x.name === monster.name;
       });
       if (found) return;
 
-      this.deck.push(this.selectMonster);
+      this.deck.push(monster);
       this.filteredfirstNames = this.deck.map((x) => x.name);
       this.filteredthirdNames = this.deck.map((x) => x.name);
 
