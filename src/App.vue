@@ -18,7 +18,7 @@
       </v-btn>
     </v-app-bar>
 
-    <v-main>
+    <v-main style="min-width: 1200px">
       <Home :lang="lang" />
     </v-main>
   </v-app>

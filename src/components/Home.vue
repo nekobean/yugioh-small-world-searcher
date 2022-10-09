@@ -57,6 +57,18 @@
                 {{ item.name }}
               </a>
             </template>
+
+            <template #[`item.text`]="{ item }">
+              <v-tooltip left max-width="500px">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn color="secondary" dark v-bind="attrs" v-on="on">
+                    テキスト
+                  </v-btn>
+                </template>
+                <span>{{ item.text }}</span>
+              </v-tooltip>
+            </template>
+
             <template #[`item.add`]="{ item }">
               <v-btn @click="addMonster(item)" color="primary">{{
                 lang == "JP" ? "追加" : "Add"
@@ -92,7 +104,84 @@
       </v-row>
     </v-container>
 
+    <!-- 中継ぎカード検索 -->
+    <h2 class="header-name">
+      {{ lang == "JP" ? "中継ぎカード検索" : "Relay Card Search" }}
+    </h2>
+    <v-container fluid>
+      <v-row>
+        <v-col cols="auto">
+          チェックボックスで選択したカードを相互に行き来可能にする中継ぎカードを検索、追加できます。
+          <v-list v-for="card in deck" :key="card.id">
+            <v-checkbox
+              v-model="relayCardIds"
+              :label="card.name"
+              :value="card.id"
+              @change="updateRelayCandidates"
+              class="ma-0 pa-0"
+              hide-details
+            ></v-checkbox>
+          </v-list>
+        </v-col>
+      </v-row>
+
+      <v-row>
+        <v-col cols="auto">
+          <template v-if="relayCandidates.length">
+            キーワードを入力すると、絞り込めます。空白区切りで複数のキーワードを指定できます。「例:
+            ドラゴン族」「例: チューナー 水属性 魔法使い族」
+            <v-text-field
+              v-model="search"
+              append-icon="mdi-magnify"
+              label="検索入力欄"
+              outlined
+              dense
+              hide-details
+            ></v-text-field>
+
+            <v-data-table
+              v-if="relayCandidates.length"
+              :headers="realyCadidatesHeaders()"
+              :items="relayCandidates"
+              :items-per-page="15"
+              dense
+              :search="search"
+              :customFilter="customFilter"
+            >
+              <template #[`item.name`]="{ item }">
+                <a
+                  :href="`https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=${item.id}&request_locale=${lang}`"
+                  target="_blank"
+                >
+                  {{ item.name }}
+                </a>
+              </template>
+
+              <template #[`item.text`]="{ item }">
+                <v-tooltip left max-width="500px">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn color="secondary" dark v-bind="attrs" v-on="on">
+                      テキスト
+                    </v-btn>
+                  </template>
+                  <span>{{ item.text }}</span>
+                </v-tooltip>
+              </template>
+
+              <template #[`item.add`]="{ item }">
+                <v-btn @click="addMonster(item)" color="primary">{{
+                  lang == "JP" ? "追加" : "Add"
+                }}</v-btn>
+              </template>
+            </v-data-table>
+          </template>
+        </v-col>
+      </v-row>
+    </v-container>
+
+    <!-- デッキ入力 -->
     <h2 class="header-name">{{ lang == "JP" ? "グラフ" : "Graph" }}</h2>
+    点の位置は、点を選択して、マウスでドラッグすると動かせます。見づらい場合は調整してください。
     <v-checkbox
       v-model="hideEdgeLabel"
       :label="lang == 'JP' ? '辺のラベルを表示する' : 'Show edge label'"
@@ -202,9 +291,12 @@ export default {
     searchTableSortBy: "third",
     filteredfirstNames: [], // サーチ元をフィルタする場合
     filteredthirdNames: [], // サーチ先をフィルタする場合
+    relayCardIds: [],
+    relayCandidates: [],
     monsters: monsters_origin,
     candidates: [],
     keyword: "",
+    search: "",
 
     cy: {
       container: null,
@@ -241,38 +333,104 @@ export default {
 
   mounted: function () {
     this.cy.container = document.getElementById("cy");
+
+    // for (let monster of monsters_origin) {
+    //   if (
+    //     ["16498", "16499", "16500", "16501", "16502", "16503"].includes(
+    //       monster.id
+    //     )
+    //   ) {
+    //     this.addMonster(monster);
+    //   }
+    // }
   },
 
   methods: {
+    updateRelayCandidates() {
+      this.relayCandidates = [];
+
+      if (this.relayCardIds.length < 2) {
+        return;
+      }
+
+      let targetCards = this.monsters.filter((x) =>
+        this.relayCardIds.includes(x.id)
+      );
+
+      for (let card of this.monsters) {
+        if (targetCards.every((x) => this.isConnected(card, x))) {
+          this.relayCandidates.push(card);
+        }
+      }
+    },
+
+    customFilter(value, search, items) {
+      if (value == undefined || typeof value == "number") {
+        return false;
+      }
+
+      let numMatches = 0;
+      for (let token of search.split(" ")) {
+        numMatches += items.name.includes(token);
+        numMatches += items.race.includes(token);
+        numMatches += items.attr.includes(token);
+        numMatches += items.detail.includes(token);
+      }
+      return numMatches >= search.split(" ").length;
+    },
+
+    realyCadidatesHeaders() {
+      let headers = [];
+
+      if (this.lang == "JP") {
+        headers = [
+          { text: "名前", value: "name" },
+          { text: "種族", value: "race" },
+          { text: "属性", value: "attr" },
+          { text: "レベル", value: "level" },
+          { text: "攻撃力", value: "attack" },
+          { text: "防御力", value: "defence" },
+          { text: "種類", value: "detail" },
+          { text: "テキスト", value: "text" },
+          { text: "", value: "add" },
+        ];
+      } else {
+        headers = [
+          { text: "Name", value: "name" },
+          { text: "Race", value: "race" },
+          { text: "Attribute", value: "attr" },
+          { text: "Level", value: "level" },
+          { text: "Attack", value: "attack" },
+          { text: "Defence", value: "defence" },
+          { text: "Detail", value: "detail" },
+          { text: "", value: "add" },
+        ];
+      }
+
+      return headers;
+    },
+
     tableHeader(btnType) {
       let headers = [];
 
       if (this.lang == "JP") {
-        headers = [{ text: "名前", value: "name" }];
+        headers = [
+          { text: "名前", value: "name" },
+          { text: "種族", value: "race" },
+          { text: "属性", value: "attr" },
+          { text: "レベル", value: "level" },
+          { text: "攻撃力", value: "attack" },
+          { text: "防御力", value: "defence" },
+        ];
       } else {
-        headers = [{ text: "Name", value: "name" }];
-      }
-
-      if (window.innerWidth > 700) {
-        if (this.lang == "JP") {
-          headers = [
-            { text: "名前", value: "name" },
-            { text: "種族", value: "type" },
-            { text: "属性", value: "attr" },
-            { text: "レベル", value: "level" },
-            { text: "攻撃力", value: "attack" },
-            { text: "防御力", value: "defence" },
-          ];
-        } else {
-          headers = [
-            { text: "Name", value: "name" },
-            { text: "Race", value: "type" },
-            { text: "Attribute", value: "attr" },
-            { text: "Level", value: "level" },
-            { text: "Attack", value: "attack" },
-            { text: "Defence", value: "defence" },
-          ];
-        }
+        headers = [
+          { text: "Name", value: "name" },
+          { text: "Race", value: "race" },
+          { text: "Attribute", value: "attr" },
+          { text: "Level", value: "level" },
+          { text: "Attack", value: "attack" },
+          { text: "Defence", value: "defence" },
+        ];
       }
 
       if (btnType == "add") {
@@ -366,7 +524,7 @@ export default {
     isConnected(a, b) {
       let same = 0;
       let info;
-      for (let key of ["type", "attr", "level", "attack", "defence"]) {
+      for (let key of ["race", "attr", "level", "attack", "defence"]) {
         if (a[key] == b[key]) {
           same += 1;
           if (key == "level") {
