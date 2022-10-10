@@ -45,8 +45,8 @@
             v-if="candidates.length"
             :headers="tableHeader('add')"
             :items="candidates"
-            hide-default-footer
-            disable-pagination
+            :items-per-page="15"
+            :footer-props="{ 'items-per-page-options': [15, 20, 50, -1] }"
             dense
           >
             <template #[`item.name`]="{ item }">
@@ -144,6 +144,7 @@
               :headers="realyCadidatesHeaders()"
               :items="relayCandidates"
               :items-per-page="15"
+              :footer-props="{ 'items-per-page-options': [15, 20, 50, -1] }"
               dense
               :search="search"
               :customFilter="customFilter"
@@ -250,6 +251,7 @@ export default {
       this.deck = [];
       this.keyword = "";
       this.monsters = JSON.parse(JSON.stringify(monsters_origin));
+      this.relayCandidates = [];
 
       if (newVal == "EN") {
         for (let monster of this.monsters) {
@@ -459,7 +461,7 @@ export default {
           this.candidates.push(monster);
         }
 
-        if (this.candidates.length > 10) break;
+        if (this.candidates.length >= 300) break;
       }
     },
 
@@ -471,8 +473,11 @@ export default {
     },
 
     matchCardJP(card, keyword) {
+      let cardName = card.name.toLowerCase();
+      keyword = keyword.toLowerCase();
+
       for (let word of keyword.split()) {
-        if (card.name.includes(word)) {
+        if (cardName.includes(word)) {
           return true;
         }
 
