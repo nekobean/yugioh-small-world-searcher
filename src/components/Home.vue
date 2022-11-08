@@ -67,6 +67,7 @@
             :items="candidates"
             :items-per-page="15"
             :footer-props="{ 'items-per-page-options': [15, 20, 50, -1] }"
+            :mobile-breakpoint="0"
             dense
           >
             <template #[`item.name`]="{ item }">
@@ -79,7 +80,7 @@
             </template>
 
             <template #[`item.text`]="{ item }">
-              <v-tooltip left max-width="500px">
+              <v-tooltip left>
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn color="secondary" dark v-bind="attrs" v-on="on">
                     テキスト
@@ -114,6 +115,7 @@
             disable-pagination
             disable-sort
             dense
+            :mobile-breakpoint="0"
           >
             <template #[`item.name`]="{ item }">
               <a
@@ -125,7 +127,7 @@
             </template>
 
             <template #[`item.text`]="{ item }">
-              <v-tooltip left max-width="500px">
+              <v-tooltip left>
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn color="secondary" dark v-bind="attrs" v-on="on">
                     テキスト
@@ -189,6 +191,7 @@
               dense
               :search="search"
               :customFilter="customFilter"
+              :mobile-breakpoint="0"
             >
               <template #[`item.name`]="{ item }">
                 <a
@@ -200,7 +203,7 @@
               </template>
 
               <template #[`item.text`]="{ item }">
-                <v-tooltip left max-width="500px">
+                <v-tooltip left>
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn color="secondary" dark v-bind="attrs" v-on="on">
                       テキスト
@@ -681,5 +684,6 @@ export default {
 
 .v-tooltip__content {
   opacity: 1 !important;
+  width: 500px !important;
 }
 </style>
