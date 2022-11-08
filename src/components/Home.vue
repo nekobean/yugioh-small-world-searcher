@@ -5,9 +5,28 @@
 
     <div>
       <p class="ma-2">
-        「デッキ入力」のセレクトボックスからモンスターカードを選択し、
-        「追加」ボタンをクリックすることでカードが追加されます。<br />
-        カードを追加していくと、「スモールワールドの結果」にスモールワールドで検索できるカードを可視化したグラフ及び早見表が表示されます。
+        <b>PC 版 Chrome で動作確認しています。</b><br />
+        「モンスターを追加」の入力欄にモンスターカード名を入力すると、が表示され候補るので、
+        「追加」ボタンをクリックすることでカードが追加されます。カード名の一部、よみがなでも大丈夫です。(例:「鉄獣」「とらいぶりげーど」)<br />
+        カードを追加していくと、「スモールワールドの結果」にスモールワールドで検索できるカードを可視化したグラフ及び早見表が表示されます。<br />
+      </p>
+
+      <p class="ma-2">
+        GitHub:
+        <a
+          href="https://github.com/nekobean/yugioh-small-world-searcher/"
+          target="_blank"
+        >
+          yugioh-small-world-searcher
+        </a>
+        / 作成者:
+        <a href="https://pystyle.info/" target="_blank"> pystyle </a> /
+        関連ツール:
+        <a
+          href="https://pystyle.info/apps/yugioh-probability-simulator/"
+          target="_blank"
+          >初動確率シミュレーター</a
+        >
       </p>
     </div>
 
@@ -22,7 +41,7 @@
         <v-col cols="auto">
           {{
             lang == "JP"
-              ? "カード名の一部を入力すると、候補が出てくるので追加してください。"
+              ? "カード名の一部を入力すると、候補が出てくるので追加してください。(例:「鉄獣」「とらいぶりげーど」)"
               : "Type part of the card name in English."
           }}
           <v-text-field
@@ -34,7 +53,8 @@
             outlined
             dense
             @input="updateCandidates"
-          ></v-text-field>
+          >
+          </v-text-field>
         </v-col>
       </v-row>
 
@@ -93,7 +113,28 @@
             hide-default-footer
             disable-pagination
             disable-sort
+            dense
           >
+            <template #[`item.name`]="{ item }">
+              <a
+                :href="`https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=${item.id}&request_locale=${lang}`"
+                target="_blank"
+              >
+                {{ item.name }}
+              </a>
+            </template>
+
+            <template #[`item.text`]="{ item }">
+              <v-tooltip left max-width="500px">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn color="secondary" dark v-bind="attrs" v-on="on">
+                    テキスト
+                  </v-btn>
+                </template>
+                <span>{{ item.text }}</span>
+              </v-tooltip>
+            </template>
+
             <template #[`item.delete`]="{ item }">
               <v-btn @click="deleteMonster(item)" color="primary">{{
                 lang == "JP" ? "削除" : "Delete"
@@ -141,7 +182,7 @@
 
             <v-data-table
               v-if="relayCandidates.length"
-              :headers="realyCadidatesHeaders()"
+              :headers="tableHeader('add')"
               :items="relayCandidates"
               :items-per-page="15"
               :footer-props="{ 'items-per-page-options': [15, 20, 50, -1] }"
@@ -381,7 +422,7 @@ export default {
       return numMatches >= search.split(" ").length;
     },
 
-    realyCadidatesHeaders() {
+    tableHeader(btnType) {
       let headers = [];
 
       if (this.lang == "JP") {
@@ -394,7 +435,6 @@ export default {
           { text: "防御力", value: "defence" },
           { text: "種類", value: "detail" },
           { text: "テキスト", value: "text" },
-          { text: "", value: "add" },
         ];
       } else {
         headers = [
@@ -405,33 +445,6 @@ export default {
           { text: "Attack", value: "attack" },
           { text: "Defence", value: "defence" },
           { text: "Detail", value: "detail" },
-          { text: "", value: "add" },
-        ];
-      }
-
-      return headers;
-    },
-
-    tableHeader(btnType) {
-      let headers = [];
-
-      if (this.lang == "JP") {
-        headers = [
-          { text: "名前", value: "name" },
-          { text: "種族", value: "race" },
-          { text: "属性", value: "attr" },
-          { text: "レベル", value: "level" },
-          { text: "攻撃力", value: "attack" },
-          { text: "防御力", value: "defence" },
-        ];
-      } else {
-        headers = [
-          { text: "Name", value: "name" },
-          { text: "Race", value: "race" },
-          { text: "Attribute", value: "attr" },
-          { text: "Level", value: "level" },
-          { text: "Attack", value: "attack" },
-          { text: "Defence", value: "defence" },
         ];
       }
 
@@ -664,5 +677,9 @@ export default {
   padding: 10px;
   border-left: 5px solid #000;
   background: #f4f4f4;
+}
+
+.v-tooltip__content {
+  opacity: 1 !important;
 }
 </style>
