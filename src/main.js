@@ -4,6 +4,7 @@ import vuetify from './plugins/vuetify'
 import VueI18n from 'vue-i18n'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import VueMeta from 'vue-meta'
 
 // vue-axios の設定
 Vue.use(VueAxios, axios)
@@ -17,6 +18,9 @@ const i18n = new VueI18n({
         en: require('../lang/en.json'),
     }
 });
+
+// Vue Meta の設定
+Vue.use(VueMeta)
 
 Vue.config.productionTip = false
 

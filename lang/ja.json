@@ -6,7 +6,8 @@
     },
     "overview": {
         "title": "概要",
-        "text": "デッキ内でサーチ可能なルートの可視化、中継ぎカードの検索を行えるツールです。"
+        "text": "スモールワールド検索ツールは、<a href=\"https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=16555&request_locale=ja\" target=\"_blank\" text>スモールワールド</a>を使用して、デッキ内でサーチ可能なルートの可視化、中継ぎカードの検索を行えるツールです。",
+        "text2": "ツールの使い方は<a href=\"https://pystyle.info/yugioh-small-world-searcher/\" target=\"_blank\" text>こちら</a>は参照ください。<br/><b>不具合報告、機能追加の要望、ご質問は<a href=\"https://pystyle.info/yugioh-small-world-searcher/#respond\" target=\"_blank\" text>こちらの記事</a>のコメント欄にお願いします。</b>"
     },
     "usage": {
         "title": "使い方",
@@ -39,6 +40,11 @@
         "text": "点の位置は、点を選択して、マウスでドラッグすると動かせます。見づらい場合は調整してください。",
         "showVertexCheckbox": {
             "label": "辺のラベルを表示する"
+        },
+        "edgeLabel": {
+            "level": "レベル",
+            "attack": "攻撃力",
+            "defence": "防御力"
         }
     },
     "patternTable": {

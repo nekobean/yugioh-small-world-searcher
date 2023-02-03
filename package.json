@@ -15,6 +15,7 @@
         "vue": "^2.6.11",
         "vue-axios": "^3.5.2",
         "vue-i18n": "^8.28.2",
+        "vue-meta": "^2.4.0",
         "vuetify": "^2.6.0"
     },
     "devDependencies": {

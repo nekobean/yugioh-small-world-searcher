@@ -34,14 +34,14 @@
         <v-icon>mdi-open-in-new</v-icon>
       </v-btn>
 
-      <v-btn
+      <!-- <v-btn
         href="https://pystyle.info/apps/yugioh-probability-simulator/"
         target="_blank"
         text
       >
         <span class="mr-2">初動確率計算ツール</span>
         <v-icon>mdi-calculator</v-icon>
-      </v-btn>
+      </v-btn> -->
     </v-app-bar>
 
     <v-main style="min-width: 1200px">
@@ -69,7 +69,16 @@ import Home from "./components/Home.vue";
 
 export default {
   name: "App",
+
   components: { Home },
+
+  metaInfo() {
+    return {
+      title: this.$t("header.appTitle"),
+      titleTemplate: "%s - pystyle",
+    };
+  },
+
   data() {
     return {
       version: version,

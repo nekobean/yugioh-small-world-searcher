@@ -6,7 +6,8 @@
     },
     "overview": {
         "title": "summary",
-        "text": "This tool visualize searchable routes in the deck using \"Small Worlds\". It also displays cards that can alternate between the specified cards."
+        "text": "This tool visualize searchable routes in the deck using \"<a href=\"https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=16555&request_locale=en\" target=\"_blank\" text>Small Worlds</a>\". It also displays cards that can alternate between the specified cards.",
+        "text2": "If you have any requests for additional features or questions, please comment on <a href=\"https://pystyle.info/yugioh-small-world-searcher/#respond\" target=\"_blank\" text>this article</a>."
     },
     "usage": {
         "title": "Usage",
@@ -38,6 +39,11 @@
         "text": "If it is hard to see, drag vertex.",
         "showVertexCheckbox": {
             "label": "Show edge label"
+        },
+        "edgeLabel": {
+            "level": "level",
+            "attack": "attack",
+            "defence": "defence"
         }
     },
     "patternTable": {

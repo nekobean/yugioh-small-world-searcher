@@ -6,7 +6,8 @@
     <h2 class="header-name text-h6">{{ $t("overview.title") }}</h2>
 
     <div class="ps-2 pt-2">
-      <p class="ma-0">{{ $t("overview.text") }}</p>
+      <p class="ma-0" v-html="$t('overview.text')"></p>
+      <p class="ma-0" v-html="$t('overview.text2')"></p>
     </div>
 
     <!-- 
@@ -177,7 +178,7 @@
 
         <v-data-table
           v-if="relayCandidates.length"
-          :relaCardFilter="relaCardFilter"
+          :custom-filter="relayCardFilter"
           :footer-props="{ 'items-per-page-options': [15, 20, 50, -1] }"
           :headers="monstersTableHeader('add')"
           :items-per-page="15"
@@ -360,7 +361,7 @@ export default {
     relayCardNames: [], // 中継ぎカードをフィルタする場合
     dstCardNames: [], // サーチ先カードをフィルタする場合
     relayCardIds: [],
-    debugMode: true,
+    //debugMode: true,
 
     cy: {
       container: null,
@@ -567,7 +568,7 @@ export default {
       );
     },
 
-    relaCardFilter(value, search, items) {
+    relayCardFilter(value, search, items) {
       if (!value == null || typeof value == "number") {
         return false; // 高速化のため、null や数値の場合、判定しない
       }
@@ -627,17 +628,17 @@ export default {
           same += 1;
           if (key == "level") {
             info = {
-              label: `レベル${a[key]}`,
+              label: `${this.$t("graph.edgeLabel.level")}${a[key]}`,
               color: "#2596be",
             };
           } else if (key == "atk") {
             info = {
-              label: `攻撃力${a[key]}`,
+              label: `${this.$t("graph.edgeLabel.attack")}${a[key]}`,
               color: "#FA7070",
             };
           } else if (key == "def") {
             info = {
-              label: `防御力${a[key]}`,
+              label: `${this.$t("graph.edgeLabel.defence")}${a[key]}`,
               color: "darkgreen",
             };
           } else if (key == "attr") {
