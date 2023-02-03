@@ -1,6 +1,6 @@
 {
     "header": {
-        "appTitle": "スモールワールド検索ツール",
+        "appTitle": "遊戯王 スモールワールド検索ツール",
         "appVersion": "バージョン",
         "cardDataUpdateDate": "カードデータ更新日"
     },
@@ -48,8 +48,8 @@
         }
     },
     "patternTable": {
-        "title": "パターン一覧",
-        "text": "パターンを限定したい場合は、チェックを外してください。"
+        "title": "早見表",
+        "text": "サーチパターンを限定したい場合は、チェックを外してください。"
     },
     "monstersTable": {
         "column": {
