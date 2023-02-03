@@ -361,7 +361,7 @@ export default {
     relayCardNames: [], // 中継ぎカードをフィルタする場合
     dstCardNames: [], // サーチ先カードをフィルタする場合
     relayCardIds: [],
-    //debugMode: true,
+    debugMode: location.hostname == "localhost",
 
     cy: {
       container: null,
@@ -404,6 +404,10 @@ export default {
   methods: {
     // カード候補を更新する。
     updateMonsterCandidates(keyword) {
+      if (!this.monsters) {
+        return false; // カード情報が存在しない場合
+      }
+
       this.deckCandidates = [];
 
       if (!keyword) {
@@ -484,7 +488,13 @@ export default {
 
     // カードデータを読み込む。
     loadCardData() {
-      const filePath = `/${this.$i18n.locale}_monsters.json`;
+      console.log(location.hostname);
+      const prefix =
+        location.hostname === "localhost"
+          ? "/"
+          : "/apps/yugioh-small-world-searcher/";
+
+      const filePath = `${prefix}${this.$i18n.locale}_monsters.json`;
       this.axios.get(filePath).then((res) => {
         this.monsters = res.data;
 
