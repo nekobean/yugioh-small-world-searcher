@@ -7,7 +7,7 @@
     "overview": {
         "title": "概要",
         "text": "スモールワールド検索ツールは、<a href=\"https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=16555&request_locale=ja\" target=\"_blank\" text>スモールワールド</a>を使用して、デッキ内でサーチ可能なルートの可視化、中継ぎカードの検索を行えるツールです。",
-        "text2": "ツールの使い方は<a href=\"https://pystyle.info/yugioh-small-world-searcher/\" target=\"_blank\" text>こちら</a>は参照ください。<br/><b>不具合報告、機能追加の要望、ご質問は<a href=\"https://pystyle.info/yugioh-small-world-searcher/#respond\" target=\"_blank\" text>こちらの記事</a>のコメント欄にお願いします。</b>"
+        "text2": "ツールの使い方は<a href=\"https://pystyle.info/yugioh-small-world-searcher/\" target=\"_blank\" text>こちら</a>は参照ください。<br/>PC の Google Chrome 推奨。動作確認済みブラウザ: Google Chrome (PC/iPhone)、Microsoft Edge<br/><b>不具合報告、機能追加の要望、ご質問は<a href=\"https://pystyle.info/yugioh-small-world-searcher/#respond\" target=\"_blank\" text>こちらの記事</a>のコメント欄にお願いします。</b>"
     },
     "usage": {
         "title": "使い方",
@@ -45,7 +45,15 @@
             "level": "レベル",
             "attack": "攻撃力",
             "defence": "防御力"
-        }
+        },
+        "downloadGraphImage": "グラフを画像で保存する"
+    },
+    "matrixTable": {
+        "title": "早見表 (マトリックス)",
+        "text": "○がついている場合、サーチ元からサーチ先をサーチすることが可能であることを意味します。<br/>○にマウスカーソルを合わせると、中継ぎカードが表示されます。",
+        "srcHeader": "サーチ元",
+        "relayHeader": "【中継ぎカード】",
+        "dstHeader": "サーチ先"
     },
     "patternTable": {
         "title": "早見表",

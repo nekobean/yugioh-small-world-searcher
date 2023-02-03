@@ -44,11 +44,19 @@
             "level": "level",
             "attack": "attack",
             "defence": "defence"
-        }
+        },
+        "downloadGraphImage": "Download graph image"
     },
     "patternTable": {
-        "title": "Pattern List",
+        "title": "Searchable List",
         "text": "Uncheck if you want to limit the pattern."
+    },
+    "matrixTable": {
+        "title": "Searchable List (Matrix)",
+        "text": "○ mark means searchable.",
+        "srcHeader": "Source",
+        "relayHeader": "Relay",
+        "dstHeader": "Destination"
     },
     "limitPatternsTable": {
         "column": {
