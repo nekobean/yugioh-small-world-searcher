@@ -69,8 +69,8 @@
         <!-- カードテキスト -->
         <template #[`item.text`]="{ item }">
           <v-tooltip left>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn color="secondary" dark v-bind="attrs" v-on="on">
+            <template #activator="{ on, attrs }">
+              <v-btn color="secondary" dark v-bind="attrs" v-on="on" small>
                 {{ $t("monstersTable.cardText") }}
               </v-btn>
             </template>
@@ -80,7 +80,7 @@
 
         <!-- 追加ボタン -->
         <template #[`item.add`]="{ item }">
-          <v-btn @click="addMonster(item)" color="primary">{{
+          <v-btn @click="addMonster(item)" color="primary" small>{{
             $t("monstersTable.addButton")
           }}</v-btn>
         </template>
@@ -118,8 +118,8 @@
         <!-- カードテキスト -->
         <template #[`item.text`]="{ item }">
           <v-tooltip left>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn color="secondary" dark v-bind="attrs" v-on="on">
+            <template #activator="{ on, attrs }">
+              <v-btn color="secondary" dark v-bind="attrs" v-on="on" small>
                 {{ $t("monstersTable.cardText") }}
               </v-btn>
             </template>
@@ -129,7 +129,7 @@
 
         <!-- 削除ボタン -->
         <template #[`item.delete`]="{ item }">
-          <v-btn @click="deleteMonster(item)" color="primary">{{
+          <v-btn @click="deleteMonster(item)" color="primary" small>{{
             $t("monstersTable.deleteButton")
           }}</v-btn>
         </template>
@@ -203,8 +203,8 @@
           <!-- カードテキスト -->
           <template #[`item.text`]="{ item }">
             <v-tooltip left>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn color="secondary" dark v-bind="attrs" v-on="on">
+              <template #activator="{ on, attrs }">
+                <v-btn color="secondary" dark v-bind="attrs" v-on="on" small>
                   {{ $t("monstersTable.cardText") }}
                 </v-btn>
               </template>
@@ -214,7 +214,7 @@
 
           <!-- 追加ボタン -->
           <template #[`item.add`]="{ item }">
-            <v-btn @click="addMonster(item)" color="primary">{{
+            <v-btn @click="addMonster(item)" color="primary" small>{{
               $t("monstersTable.addButton")
             }}</v-btn>
           </template>
@@ -235,10 +235,28 @@
         v-model="showEdgeLabel"
         :label="$t('graph.showVertexCheckbox.label')"
         @click="updateEdgeLabel"
+        hide-details
       ></v-checkbox>
 
-      <div id="cy"></div>
+      <div id="cy" class="mt-3" />
+
+      <!-- <v-btn color="primary" class="mt-3" @click="downloadGraphImage">
+        {{ $t("graph.downloadGraphImage") }}
+      </v-btn> -->
     </div>
+
+    <!-- 
+        マトリックス (スマホは表示崩れるので非表示)
+    -->
+    <template v-if="!isMobile">
+      <h2 class="header-name text-h6 mt-3">{{ $t("matrixTable.title") }}</h2>
+
+      <div class="ps-2 pt-2">
+        <p v-html="$t('matrixTable.text')"></p>
+
+        <div v-html="createMatrix()"></div>
+      </div>
+    </template>
 
     <!-- 
         パターン表
@@ -297,6 +315,7 @@
         :sort-by.sync="patternsSortBy"
         disable-pagination
         hide-default-footer
+        :mobile-breakpoint="0"
         dense
         class="mt-5 patterns-table"
       >
@@ -310,6 +329,7 @@
 
 <script>
 import cytoscape from "cytoscape";
+import { isMobile } from "mobile-device-detect";
 import dagre from "cytoscape-dagre";
 import {
   jaIdToMonsterProp,
@@ -361,7 +381,9 @@ export default {
     // 辺のラベルを隠すかどうか
     showEdgeLabel: false,
     patternsSortBy: "dst",
-    debugMode: location.hostname == "localhost",
+    debugMode: location.hostname === "localhost",
+    graphImage: null,
+    isMobile: isMobile,
 
     //
     // 言語が変更されたら初期化する変数
@@ -374,7 +396,7 @@ export default {
     relayCardIds: [],
     filteredRelayCandidates: [],
 
-    cy: {
+    cyConfig: {
       container: null,
       maxZoom: 1,
       style: cytoscape
@@ -408,7 +430,7 @@ export default {
   }),
 
   mounted: function () {
-    this.cy.container = document.getElementById("cy");
+    this.cyConfig.container = document.getElementById("cy");
     this.loadCardData();
   },
 
@@ -731,21 +753,23 @@ export default {
       }
 
       // cytoscape オブジェクトを作成する。
-      this.cy.elements.nodes = nodes;
-      this.cy.elements.edges = edges;
-      let cy = cytoscape(this.cy);
+      this.cyConfig.elements.nodes = nodes;
+      this.cyConfig.elements.edges = edges;
+      let cy = cytoscape(this.cyConfig);
       cy.userZoomingEnabled(false);
+
+      //this.graphImage = cy.png({ bg: "#ffffff" });
 
       this.createPatternTable(cy);
     },
 
     updateEdgeLabel() {
       if (!this.showEdgeLabel) {
-        this.cy.style.selector("edge").style({
+        this.cyConfig.style.selector("edge").style({
           content: "",
         });
       } else {
-        this.cy.style.selector("edge").style({
+        this.cyConfig.style.selector("edge").style({
           content: "data(label)",
         });
       }
@@ -797,17 +821,82 @@ export default {
       // テーブルを作成する。
       this.patterns = [];
       for (const [srcAnddstName, relays] of Object.entries(table)) {
-        const [srcNames, dstNames] = srcAnddstName.split("、");
+        const [srcName, dstName] = srcAnddstName.split("、");
         const relayNames = relays
           .sort((a, b) => a.id - b.id)
           .map((x) => x.name);
 
         this.patterns.push({
-          src: srcNames,
+          src: srcName,
           relay: relayNames,
-          dst: dstNames,
+          dst: dstName,
         });
       }
+    },
+
+    downloadGraphImage() {
+      if (!this.graphImage) {
+        return; // 画像が生成されていない場合
+      }
+
+      var a = document.createElement("a");
+      a.href = this.graphImage;
+      a.download = "Small-World.png";
+      a.click();
+    },
+
+    createMatrix() {
+      if (!this.patterns || !this.patterns.length) {
+        return;
+      }
+
+      let html = "";
+      // 1行目: サーチ先
+      html += '<table class="matrix">';
+      html += `<tr><th colspan="2" rowspan="2"></th>`;
+      html += `<th colspan="${this.deck.length}">${this.$t(
+        "matrixTable.dstHeader"
+      )}</th></tr>`;
+
+      // 2行目: サーチ先モンスター名
+      html += "<tr>";
+      this.deck.forEach((card) => {
+        html += `<th><span class="vertical-text">${card.name}</span></th>`;
+      });
+      html += "</tr>";
+
+      // 3行目~: サーチ元モンスター名
+      this.deck.forEach((srcCard, i) => {
+        html += "<tr>";
+
+        if (i === 0) {
+          html += `<th rowspan="${
+            this.deck.length
+          }"><span class="vertical-text">${this.$t(
+            "matrixTable.srcHeader"
+          )}</span></th>`;
+        }
+
+        html += `<th>${this.deck[i].name}</th>`;
+        this.deck.forEach((dstCard) => {
+          const pattern = this.patterns.find(
+            (x) => x.src == srcCard.name && x.dst == dstCard.name
+          );
+          if (pattern) {
+            html += `<td style="color: green"><div class="tooltip1"><p>○</p><div class="description1">${this.$t(
+              "matrixTable.relayHeader"
+            )}<br/>${pattern.relay.join("<br/>")}</div></div></td>`;
+          } else {
+            html += `<td></td>`;
+          }
+        });
+
+        html += "</tr>";
+      });
+
+      html += "</table>";
+
+      return html;
     },
   },
 };
@@ -837,5 +926,58 @@ export default {
 }
 .patterns-table td {
   padding: 6px !important;
+}
+
+.matrix {
+  border-collapse: collapse;
+}
+
+.matrix th,
+.matrix td {
+  border: thin solid black;
+  text-align: center;
+}
+
+.vertical-text {
+  writing-mode: vertical-rl;
+  white-space: pre;
+  display: inline-block;
+}
+
+.tooltip1 {
+  position: relative;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.tooltip1 p {
+  margin: 0;
+  padding: 0;
+}
+
+.description1 {
+  display: none;
+  position: absolute;
+  border-radius: 5px;
+  padding: 5px;
+  font-size: 12px;
+  line-height: 1.5em;
+  color: #fff;
+  background: #000;
+  width: 400px;
+}
+
+.description1:before {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -15px;
+}
+
+.tooltip1:hover .description1 {
+  display: inline-block;
+  top: 0px;
+  left: 30px;
 }
 </style>

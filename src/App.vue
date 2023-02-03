@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar app color="primary" dark>
+    <v-app-bar app color="primary" dark style="min-width: 1200px">
       <div>
         <h1 class="text-h5">{{ $t("header.appTitle") }}</h1>
         <span class="subtitle-1">
