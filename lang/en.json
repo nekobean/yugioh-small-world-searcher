@@ -41,9 +41,25 @@
         }
     },
     "patternTable": {
-        "title": "Pattern List"
+        "title": "Pattern List",
+        "text": "Uncheck if you want to limit the pattern."
     },
-    "monsterTable": {
+    "limitPatternsTable": {
+        "column": {
+            "name": "Name",
+            "src": "Source",
+            "relay": "Relay",
+            "dst": "Dest"
+        }
+    },
+    "patternsTable": {
+        "column": {
+            "src": "Source",
+            "relay": "Relay",
+            "dst": "Dest"
+        }
+    },
+    "monstersTable": {
         "column": {
             "name": "Name",
             "race": "Race",

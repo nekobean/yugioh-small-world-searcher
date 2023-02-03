@@ -45,7 +45,7 @@
     </v-app-bar>
 
     <v-main style="min-width: 1200px">
-      <Home :lang="lang" />
+      <Home />
     </v-main>
 
     <v-footer padless>
@@ -73,7 +73,6 @@ export default {
   data() {
     return {
       version: version,
-      lang: "jp",
       langs: [
         {
           name: "日本語",

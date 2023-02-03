@@ -42,9 +42,10 @@
         }
     },
     "patternTable": {
-        "title": "パターン一覧"
+        "title": "パターン一覧",
+        "text": "パターンを限定したい場合は、チェックを外してください。"
     },
-    "monsterTable": {
+    "monstersTable": {
         "column": {
             "name": "名前",
             "race": "種族",
@@ -58,6 +59,21 @@
         "addButton": "追加",
         "deleteButton": "削除",
         "cardText": "テキスト"
+    },
+    "limitPatternsTable": {
+        "column": {
+            "name": "名前",
+            "src": "サーチ元",
+            "relay": "中継ぎ",
+            "dst": "サーチ先"
+        }
+    },
+    "patternsTable": {
+        "column": {
+            "src": "サーチ元",
+            "relay": "中継ぎ",
+            "dst": "サーチ先"
+        }
     },
     "appendix": {
         "github": "GitHub",
