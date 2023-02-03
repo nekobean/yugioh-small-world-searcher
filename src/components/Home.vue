@@ -29,7 +29,7 @@
 
       <!-- カード名入力欄 -->
       <v-text-field
-        ref="monstersTable"
+        ref="monsterNameInput"
         :label="$t('addMonster.monsterNameInput.label')"
         :placeholder="$t('addMonster.monsterNameInput.placeholder')"
         clearable
@@ -163,8 +163,7 @@
         <p>{{ $t("relayMonster.text2") }}</p>
 
         <v-text-field
-          ref="relayTable"
-          v-model="search"
+          ref="keywordInput"
           :label="$t('relayMonster.keywordInput.label')"
           :placeholder="$t('relayMonster.keywordInput.placeholder')"
           append-icon="mdi-magnify"
@@ -174,17 +173,16 @@
           outlined
           persistent-placeholder
           style="width: 500px"
+          @input="filterRelayCandidates"
         ></v-text-field>
 
         <v-data-table
-          v-if="relayCandidates.length"
-          :custom-filter="relayCardFilter"
+          v-if="filteredRelayCandidates.length"
           :footer-props="{ 'items-per-page-options': [15, 20, 50, -1] }"
           :headers="monstersTableHeader('add')"
           :items-per-page="15"
-          :items="relayCandidates"
+          :items="filteredRelayCandidates"
           :mobile-breakpoint="0"
-          :search="search"
           class="mt-5"
           dense
         >
@@ -335,8 +333,19 @@ export default {
       this.deckCandidates = [];
       this.relayCandidates = [];
       this.deck = [];
+      this.patterns = [];
+      this.relayCardIds = [];
+      this.srcCardNames = [];
+      this.relayCardNames = [];
+      this.dstCardNames = [];
+      this.filteredRelayCandidates = [];
+
       this.updateGraph();
-      this.$refs.monstersTable.reset();
+      if (this.$refs.keywordInput) {
+        // 中継ぎ絞り込み用のテキストボックスは常に存在しているとは限らない
+        this.$refs.keywordInput.reset();
+      }
+      this.$refs.monsterNameInput.reset();
     },
   },
 
@@ -351,17 +360,19 @@ export default {
     deckCandidates: [],
     // 辺のラベルを隠すかどうか
     showEdgeLabel: false,
-    // 中継ぎ検索
-    relayCandidates: [],
-    search: "",
-    // パターン一覧
-    patterns: [],
     patternsSortBy: "dst",
+    debugMode: location.hostname == "localhost",
+
+    //
+    // 言語が変更されたら初期化する変数
+    //
+    relayCandidates: [], // 中継ぎ検索
+    patterns: [], // パターン一覧
     srcCardNames: [], // サーチ元カードをフィルタする場合
     relayCardNames: [], // 中継ぎカードをフィルタする場合
     dstCardNames: [], // サーチ先カードをフィルタする場合
     relayCardIds: [],
-    debugMode: location.hostname == "localhost",
+    filteredRelayCandidates: [],
 
     cy: {
       container: null,
@@ -432,6 +443,7 @@ export default {
 
     // 中継ぎカード候補を更新する。
     updateRelayCandidates() {
+      this.search = "";
       this.relayCandidates = [];
 
       if (this.relayCardIds.length < 2) {
@@ -445,6 +457,28 @@ export default {
       for (const card of this.monsters) {
         if (targetCards.every((x) => this.isConnected(card, x))) {
           this.relayCandidates.push(card);
+        }
+      }
+
+      this.filteredRelayCandidates = this.relayCandidates;
+    },
+
+    filterRelayCandidates(keyword) {
+      if (!keyword) {
+        return;
+      }
+
+      // 種族、属性、性質は完全一致で確認するため、
+      // サニタイズされていないワードも保持しておく。
+      let sanitizedKeywords = keyword
+        .split(" ")
+        .map((x) => [x, this.sanitizeWord(x)])
+        .filter((x) => x[0] && x[1]);
+
+      this.filteredRelayCandidates = [];
+      for (const card of this.relayCandidates) {
+        if (this.isRelayMonsterMatched(card, sanitizedKeywords)) {
+          this.filteredRelayCandidates.push(card);
         }
       }
     },
@@ -488,7 +522,6 @@ export default {
 
     // カードデータを読み込む。
     loadCardData() {
-      console.log(location.hostname);
       const prefix =
         location.hostname === "localhost"
           ? "/"
@@ -578,27 +611,20 @@ export default {
       );
     },
 
-    relayCardFilter(value, search, items) {
-      if (!value == null || typeof value == "number") {
-        return false; // 高速化のため、null や数値の場合、判定しない
-      }
-
-      const sanitizedKeywords = search
-        .split(" ")
-        .map((x) => [this.sanitizeWord(x), x])
-        .filter(Boolean);
-
+    isRelayMonsterMatched(card, keywords) {
       let numMatches = 0;
-      for (const [sanitizedKeyword, keyword] of sanitizedKeywords) {
-        numMatches += items.sanitizedName.includes(sanitizedKeyword);
-        numMatches += items.sanitizedRuby.includes(sanitizedKeyword);
-        numMatches += items.race.includes(keyword);
-        numMatches += items.attr.includes(keyword);
-        numMatches += items.prop.includes(keyword);
+      for (const [keyword, sanitizeKeyword] of keywords) {
+        numMatches +=
+          card.sanitizedName.includes(sanitizeKeyword) ||
+          card.sanitizedRuby.includes(sanitizeKeyword);
+        // 湯族、属性、性質は完全一致で確認する。
+        numMatches += card.race.includes(keyword);
+        numMatches += card.attr.includes(keyword);
+        numMatches += card.prop.includes(keyword);
       }
 
       // AND 検索
-      return numMatches >= sanitizedKeywords.length;
+      return numMatches >= keywords.length;
     },
 
     addMonster(monster) {
