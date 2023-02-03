@@ -1,10 +1,26 @@
 <template>
   <v-app>
     <v-app-bar app color="primary" dark>
-      {{ lang == "JP" ? "スモールワールド検索ツール" : "Small World Seacher" }}
-      version 1.1.0 (カードデータ更新日 2022/11/9)
-      <v-radio-group v-model="lang" mandatory row hide-details class="ml-5">
-        <v-radio v-for="x in langs" :key="x" :label="x" :value="x"></v-radio>
+      <div>
+        <h1 class="text-h5">{{ $t("header.appTitle") }}</h1>
+        <span class="subtitle-1">
+          {{ $t("header.appVersion") }}: {{ version }}
+          {{ $t("header.cardDataUpdateDate") }}: 2022/2/1
+        </span>
+      </div>
+      <v-radio-group
+        v-model="$i18n.locale"
+        mandatory
+        row
+        hide-details
+        class="ml-5"
+      >
+        <v-radio
+          v-for="x in langs"
+          :key="x.name"
+          :label="x.name"
+          :value="x.value"
+        ></v-radio>
       </v-radio-group>
 
       <v-spacer></v-spacer>
@@ -31,10 +47,24 @@
     <v-main style="min-width: 1200px">
       <Home :lang="lang" />
     </v-main>
+
+    <v-footer padless>
+      <v-col class="text-center" cols="12">
+        {{ $t("appendix.github") }}:
+        <a
+          href="https://github.com/nekobean/yugioh-small-world-searcher/"
+          target="_blank"
+          >yugioh-small-world-searcher</a
+        >
+        / {{ $t("appendix.author") }}:
+        <a href="https://pystyle.info/" target="_blank"> pystyle </a>
+      </v-col>
+    </v-footer>
   </v-app>
 </template>
 
 <script>
+import { version } from "../package";
 import Home from "./components/Home.vue";
 
 export default {
@@ -42,8 +72,18 @@ export default {
   components: { Home },
   data() {
     return {
+      version: version,
       lang: "jp",
-      langs: ["JP", "EN"],
+      langs: [
+        {
+          name: "日本語",
+          value: "ja",
+        },
+        {
+          name: "English",
+          value: "en",
+        },
+      ],
     };
   },
 };

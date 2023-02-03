@@ -1,0 +1,65 @@
+{
+    "header": {
+        "appTitle": "Small World Seacher",
+        "appVersion": "version",
+        "cardDataUpdateDate": "card data update date"
+    },
+    "overview": {
+        "title": "summary",
+        "text": "This tool visualize searchable routes in the deck using \"Small Worlds\". It also displays cards that can alternate between the specified cards."
+    },
+    "usage": {
+        "title": "Usage",
+        "text": "Enter a monster card name in the \"Add Monster\" field, and list of monster cards will be displayed. Click the \"Add\" button to add the monster card."
+    },
+    "addMonster": {
+        "title": "Add Monster",
+        "text": "Enter a partial card name, and list of monster cards will be displayed. Click the \"Add\" button to add the deck.",
+        "monsterNameInput": {
+            "label": "Monster Name",
+            "placeholder": "Enter the monster name"
+        }
+    },
+    "deck": {
+        "title": "Deck",
+        "text": "Cards added to the deck display here."
+    },
+    "relayMonster": {
+        "title": "Relay Card Search",
+        "text": "Search relay cards that can alternate between the specified cards.",
+        "text2": "Enter keywords to narrow down. (e.x. \"dragon tuner\")",
+        "keywordInput": {
+            "label": "Keyword",
+            "placeholder": "Type keyword"
+        }
+    },
+    "graph": {
+        "title": "Graph",
+        "text": "If it is hard to see, drag vertex.",
+        "showVertexCheckbox": {
+            "label": "Show edge label"
+        }
+    },
+    "patternTable": {
+        "title": "Pattern List"
+    },
+    "monsterTable": {
+        "column": {
+            "name": "Name",
+            "race": "Race",
+            "attr": "Attribute",
+            "level": "Level",
+            "atk": "Attack",
+            "def": "Defence",
+            "prop": "Property",
+            "text": "Text"
+        },
+        "addButton": "Add",
+        "deleteButton": "Delete",
+        "cardText": "Text"
+    },
+    "appendix": {
+        "github": "GitHub",
+        "author": "Author"
+    }
+}
