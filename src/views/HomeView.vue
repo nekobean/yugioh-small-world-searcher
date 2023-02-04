@@ -8,6 +8,19 @@
     <div class="ps-2 pt-2">
       <p class="ma-0" v-html="$t('overview.text')"></p>
       <p class="ma-0" v-html="$t('overview.text2')"></p>
+
+      <v-btn color="#34c6eb" class="mt-3 ml-3" light rounded dark>
+        <ShareNetwork
+          network="twitter"
+          :url="pageUrl"
+          :title="'【' + $t('header.appTitle') + '】'"
+          :description="$t('overview.tweetDescription')"
+          :hashtags="$t('overview.tweetHashtags')"
+          style="text-decoration: none; color: inherit"
+        >
+          {{ $t("overview.tweet") }}
+        </ShareNetwork></v-btn
+      >
     </div>
 
     <!-- 
@@ -80,9 +93,15 @@
 
         <!-- 追加ボタン -->
         <template #[`item.add`]="{ item }">
-          <v-btn @click="addMonster(item)" color="primary" small>{{
-            $t("monstersTable.addButton")
-          }}</v-btn>
+          <v-btn
+            @click="
+              addMonster(item);
+              updateUrl();
+            "
+            color="primary"
+            small
+            >{{ $t("monstersTable.addButton") }}</v-btn
+          >
         </template>
       </v-data-table>
     </div>
@@ -131,9 +150,15 @@
 
         <!-- 削除ボタン -->
         <template #[`item.delete`]="{ item }">
-          <v-btn @click="deleteMonster(item)" color="primary" small>{{
-            $t("monstersTable.deleteButton")
-          }}</v-btn>
+          <v-btn
+            @click="
+              deleteMonster(item);
+              updateUrl();
+            "
+            color="primary"
+            small
+            >{{ $t("monstersTable.deleteButton") }}</v-btn
+          >
         </template>
       </v-data-table>
 
@@ -144,11 +169,30 @@
       <v-btn
         color="primary"
         class="mt-3 ml-3"
-        v-clipboard:copy="deckURL"
+        v-clipboard:copy="deckUrl"
         :disabled="!this.deck.length"
       >
         {{ $t("deck.copyURL") }}
       </v-btn>
+
+      <v-btn
+        color="#34c6eb"
+        class="mt-3 ml-3"
+        :disabled="!this.deck.length"
+        light
+        rounded
+        dark
+      >
+        <ShareNetwork
+          network="twitter"
+          :url="deckUrl"
+          :title="'【' + $t('header.appTitle') + '】'"
+          :description="$t('deck.tweetDescription')"
+          :hashtags="$t('deck.tweetHashtags')"
+          style="text-decoration: none; color: inherit"
+          >{{ $t("deck.tweet") }}
+        </ShareNetwork></v-btn
+      >
     </div>
 
     <!-- 
@@ -227,9 +271,15 @@
 
           <!-- 追加ボタン -->
           <template #[`item.add`]="{ item }">
-            <v-btn @click="addMonster(item)" color="primary" small>{{
-              $t("monstersTable.addButton")
-            }}</v-btn>
+            <v-btn
+              @click="
+                addMonster(item);
+                updateUrl();
+              "
+              color="primary"
+              small
+              >{{ $t("monstersTable.addButton") }}</v-btn
+            >
           </template>
         </v-data-table>
       </template>
@@ -393,9 +443,17 @@ export default {
       return this.patterns.filter((x) => x.src != x.dst);
     },
 
-    deckURL() {
-      const cardIds = this.deck.map((x) => x.id).join(",");
-      return `${window.location.host}/apps/yugioh-small-world-searcher/?card_id=${cardIds}`;
+    pageUrl() {
+      return `https://${window.location.host}${this.appDir}/`;
+    },
+
+    deckUrl() {
+      if (this.deck.length) {
+        const cardIds = this.deck.map((x) => x.id).join(",");
+        return `https://${window.location.host}${this.appDir}/?card_id=${cardIds}`;
+      } else {
+        return `https://${window.location.host}${this.appDir}/`;
+      }
     },
   },
 
@@ -414,6 +472,7 @@ export default {
     debugMode: location.hostname === "localhost",
     graphImage: null,
     isMobile: isMobile,
+    appDir: "/apps/yugioh-small-world-searcher",
 
     //
     // 言語が変更されたら初期化する変数
@@ -574,7 +633,7 @@ export default {
 
     // カードデータを読み込む。
     loadCardData() {
-      const filePath = `/apps/yugioh-small-world-searcher/${this.$i18n.locale}_monsters.json`;
+      const filePath = `${this.appDir}/${this.$i18n.locale}_monsters.json`;
       this.axios.get(filePath).then((res) => {
         this.monsters = res.data;
 
@@ -690,12 +749,6 @@ export default {
       this.relayCardNames = this.deck.map((x) => x.name);
       this.dstCardNames = this.deck.map((x) => x.name);
 
-      const cardIds = this.deck.map((x) => x.id).join(",");
-      this.$router.push({
-        path: this.$route.path,
-        query: { card_id: cardIds },
-      });
-
       this.updateGraph();
     },
 
@@ -708,17 +761,6 @@ export default {
       this.relayCardNames = this.deck.map((x) => x.name);
       this.dstCardNames = this.deck.map((x) => x.name);
 
-      const cardIds = this.deck.map((x) => x.id).join(",");
-      if (this.deck.length) {
-        this.$router.push({
-          path: this.$route.path,
-          query: { card_id: cardIds },
-        });
-      } else {
-        this.$router.push({
-          path: this.$route.path,
-        });
-      }
       this.updateGraph();
     },
 
@@ -728,19 +770,26 @@ export default {
       this.relayCardNames = [];
       this.dstCardNames = [];
 
+      this.updateGraph();
+      this.updateUrl();
+    },
+
+    updateUrl() {
       const cardIds = this.deck.map((x) => x.id).join(",");
       if (this.deck.length) {
-        this.$router.push({
-          path: this.$route.path,
-          query: { card_id: cardIds },
-        });
+        this.$router
+          .push({
+            path: this.$route.path,
+            query: { card_id: cardIds },
+          })
+          .catch(() => {});
       } else {
-        this.$router.push({
-          path: this.$route.path,
-        });
+        this.$router
+          .push({
+            path: this.$route.path,
+          })
+          .catch(() => {});
       }
-
-      this.updateGraph();
     },
 
     isConnected(a, b) {

@@ -7,6 +7,7 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import VueMeta from 'vue-meta'
 import VueClipboard from 'vue-clipboard2'
+import VueSocialSharing from 'vue-social-sharing'
 
 Vue.config.productionTip = false
 
@@ -28,6 +29,9 @@ Vue.use(VueMeta)
 
 // vue-clipboard2 の設定
 Vue.use(VueClipboard)
+
+// vue-social-sharing の設定
+Vue.use(VueSocialSharing);
 
 new Vue({
     router,

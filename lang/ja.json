@@ -7,7 +7,10 @@
     "overview": {
         "title": "概要",
         "text": "スモールワールド検索ツールは、<a href=\"https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=16555&request_locale=ja\" target=\"_blank\" text>スモールワールド</a>を使用して、デッキ内でサーチ可能なルートの可視化、中継ぎカードの検索を行えるツールです。",
-        "text2": "ツールの使い方は<a href=\"https://pystyle.info/yugioh-small-world-searcher/\" target=\"_blank\" text>こちら</a>は参照ください。<br/>PC の Google Chrome 推奨。動作確認済みブラウザ: Google Chrome (PC/iPhone)、Microsoft Edge<br/><b>不具合報告、機能追加の要望、ご質問は<a href=\"https://pystyle.info/yugioh-small-world-searcher/#respond\" target=\"_blank\" text>こちらの記事</a>のコメント欄にお願いします。</b>"
+        "text2": "ツールの使い方は<a href=\"https://pystyle.info/yugioh-small-world-searcher/\" target=\"_blank\" text>こちら</a>は参照ください。<br/>PC の Google Chrome 推奨。動作確認済みブラウザ: Google Chrome (PC/iPhone)、Microsoft Edge<br/><b>不具合報告、機能追加の要望、ご質問は<a href=\"https://pystyle.info/yugioh-small-world-searcher/#respond\" target=\"_blank\" text>こちらの記事</a>のコメント欄にお願いします。</b>",
+        "tweet": "ツールをツイートする",
+        "tweetHashtags": "遊戯王,スモールワールド",
+        "tweetDescription": "スモールワールドでサーチできるルートを検索できるツールです。"
     },
     "usage": {
         "title": "使い方",
@@ -26,7 +29,10 @@
         "title": "デッキ",
         "text": "デッキに追加したカードがここに表示されます。<br>URL をブックマークしておくことで、開いたときに登録したデッキの状態が再現されます。",
         "copyURL": "デッキの URL をコピー",
-        "clear": "クリア"
+        "clear": "クリア",
+        "tweet": "デッキをツイートする",
+        "tweetHashtags": "遊戯王,スモールワールド",
+        "tweetDescription": "スモールワールドでサーチできるルートを検索できるツールです。"
     },
     "relayMonster": {
         "title": "中継ぎカード検索",

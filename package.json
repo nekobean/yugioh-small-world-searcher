@@ -19,6 +19,7 @@
         "vue-i18n": "^8.28.2",
         "vue-meta": "^2.4.0",
         "vue-router": "^3.5.1",
+        "vue-social-sharing": "^3.0.9",
         "vuetify": "^2.6.0"
     },
     "devDependencies": {

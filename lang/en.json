@@ -7,7 +7,10 @@
     "overview": {
         "title": "summary",
         "text": "This tool visualize searchable routes in the deck using \"<a href=\"https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=16555&request_locale=en\" target=\"_blank\" text>Small Worlds</a>\". It also displays cards that can alternate between the specified cards.",
-        "text2": "If you have any requests for additional features or questions, please comment on <a href=\"https://pystyle.info/yugioh-small-world-searcher/#respond\" target=\"_blank\" text>this article</a>."
+        "text2": "If you have any requests for additional features or questions, please comment on <a href=\"https://pystyle.info/yugioh-small-world-searcher/#respond\" target=\"_blank\" text>this article</a>.",
+        "tweet": "Tweet Link",
+        "tweetHashtags": "yugioh,SmallWorld",
+        "tweetDescription": "This tool visualize routes that can be searched in Small World."
     },
     "usage": {
         "title": "Usage",
@@ -25,7 +28,10 @@
         "title": "Deck",
         "text": "Cards added to the deck display here.",
         "copyURL": "Copy Deck URL",
-        "clear": "Clear"
+        "clear": "Clear",
+        "tweet": "Tweet Deck",
+        "tweetHashtags": "yugioh,SmallWorld",
+        "tweetDescription": "This tool visualize routes that can be searched in Small World."
     },
     "relayMonster": {
         "title": "Relay Card Search",
