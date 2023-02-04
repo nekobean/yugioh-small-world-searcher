@@ -311,7 +311,7 @@
 
       <v-data-table
         :headers="patternsTableHeader()"
-        :items="patterns"
+        :items="filteredPatterns"
         :sort-by.sync="patternsSortBy"
         disable-pagination
         hide-default-footer
@@ -366,6 +366,12 @@ export default {
         this.$refs.keywordInput.reset();
       }
       this.$refs.monsterNameInput.reset();
+    },
+  },
+
+  computed: {
+    filteredPatterns: function () {
+      return this.patterns.filter((x) => x.src != x.dst);
     },
   },
 
@@ -790,9 +796,9 @@ export default {
             .filter((x) => x.data("name") != undefined);
 
           for (let thirdNode of thirdNodes) {
-            if (firstNode.data("name") == thirdNode.data("name")) {
-              continue; // サーチ元とサーチ先が同じ
-            }
+            // if (firstNode.data("name") == thirdNode.data("name")) {
+            //   continue; // サーチ元とサーチ先が同じ
+            // }
             if (!this.srcCardNames.includes(firstNode.data("name"))) {
               continue; // サーチ元を限定する
             }
