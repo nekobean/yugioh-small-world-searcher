@@ -45,7 +45,7 @@
     </v-app-bar>
 
     <v-main style="min-width: 1200px">
-      <Home />
+      <router-view />
     </v-main>
 
     <v-footer padless>
@@ -65,12 +65,9 @@
 
 <script>
 import { version } from "../package";
-import Home from "./components/Home.vue";
 
 export default {
   name: "App",
-
-  components: { Home },
 
   metaInfo() {
     return {

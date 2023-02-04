@@ -94,6 +94,8 @@
 
     <!-- カード一覧 -->
     <div class="ps-2 pt-2">
+      <p v-html="$t('deck.text')"></p>
+
       <v-data-table
         v-if="deck.length"
         :headers="monstersTableHeader('delete')"
@@ -135,7 +137,18 @@
         </template>
       </v-data-table>
 
-      <p v-if="!deck.length">{{ $t("deck.text") }}</p>
+      <v-btn color="primary" class="mt-3" @click="clearMonster">
+        {{ $t("deck.clear") }}
+      </v-btn>
+
+      <v-btn
+        color="primary"
+        class="mt-3 ml-3"
+        v-clipboard:copy="deckURL"
+        :disabled="!this.deck.length"
+      >
+        {{ $t("deck.copyURL") }}
+      </v-btn>
     </div>
 
     <!-- 
@@ -379,6 +392,11 @@ export default {
       // パターン表でサーチ元とサーチ先が同じものは除外するため
       return this.patterns.filter((x) => x.src != x.dst);
     },
+
+    deckURL() {
+      const cardIds = this.deck.map((x) => x.id).join(",");
+      return `${window.location.host}/apps/yugioh-small-world-searcher/?card_id=${cardIds}`;
+    },
   },
 
   data: () => ({
@@ -556,12 +574,7 @@ export default {
 
     // カードデータを読み込む。
     loadCardData() {
-      const prefix =
-        location.hostname === "localhost"
-          ? "/"
-          : "/apps/yugioh-small-world-searcher/";
-
-      const filePath = `${prefix}${this.$i18n.locale}_monsters.json`;
+      const filePath = `/apps/yugioh-small-world-searcher/${this.$i18n.locale}_monsters.json`;
       this.axios.get(filePath).then((res) => {
         this.monsters = res.data;
 
@@ -585,14 +598,16 @@ export default {
           }
         }
 
-        // デバッグ用
-        if (this.debugMode) {
+        // クエリのカード ID を取得する。
+        let cardIds = [];
+        if (this.$route.query.card_id) {
+          const tokens = this.$route.query.card_id.split(",");
+          for (const token of tokens) {
+            cardIds.push(Number(token));
+          }
+
           for (const monster of this.monsters) {
-            if (
-              [16498, 16499, 16500, 16501, 16502, 16503, 4013].includes(
-                monster.id
-              )
-            ) {
+            if (cardIds.includes(monster.id)) {
               this.addMonster(monster);
             }
           }
@@ -675,6 +690,12 @@ export default {
       this.relayCardNames = this.deck.map((x) => x.name);
       this.dstCardNames = this.deck.map((x) => x.name);
 
+      const cardIds = this.deck.map((x) => x.id).join(",");
+      this.$router.push({
+        path: this.$route.path,
+        query: { card_id: cardIds },
+      });
+
       this.updateGraph();
     },
 
@@ -686,6 +707,38 @@ export default {
       this.srcCardNames = this.deck.map((x) => x.name);
       this.relayCardNames = this.deck.map((x) => x.name);
       this.dstCardNames = this.deck.map((x) => x.name);
+
+      const cardIds = this.deck.map((x) => x.id).join(",");
+      if (this.deck.length) {
+        this.$router.push({
+          path: this.$route.path,
+          query: { card_id: cardIds },
+        });
+      } else {
+        this.$router.push({
+          path: this.$route.path,
+        });
+      }
+      this.updateGraph();
+    },
+
+    clearMonster(monster) {
+      this.deck = [];
+      this.srcCardNames = [];
+      this.relayCardNames = [];
+      this.dstCardNames = [];
+
+      const cardIds = this.deck.map((x) => x.id).join(",");
+      if (this.deck.length) {
+        this.$router.push({
+          path: this.$route.path,
+          query: { card_id: cardIds },
+        });
+      } else {
+        this.$router.push({
+          path: this.$route.path,
+        });
+      }
 
       this.updateGraph();
     },

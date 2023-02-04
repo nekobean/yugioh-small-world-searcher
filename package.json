@@ -1,6 +1,6 @@
 {
     "name": "yugioh-small-world-searcher",
-    "version": "1.3.0",
+    "version": "0.1.0",
     "private": true,
     "scripts": {
         "serve": "vue-cli-service serve",
@@ -8,28 +8,32 @@
         "lint": "vue-cli-service lint"
     },
     "dependencies": {
-        "axios": "^1.3.0",
-        "core-js": "^3.6.5",
+        "axios": "^1.3.2",
+        "core-js": "^3.8.3",
         "cytoscape": "^3.23.0",
         "cytoscape-dagre": "^2.4.0",
         "mobile-device-detect": "^0.4.3",
-        "vue": "^2.6.11",
+        "vue": "^2.6.14",
         "vue-axios": "^3.5.2",
+        "vue-clipboard2": "^0.3.3",
         "vue-i18n": "^8.28.2",
         "vue-meta": "^2.4.0",
+        "vue-router": "^3.5.1",
         "vuetify": "^2.6.0"
     },
     "devDependencies": {
-        "@vue/cli-plugin-babel": "~4.5.15",
-        "@vue/cli-plugin-eslint": "~4.5.15",
-        "@vue/cli-service": "~4.5.15",
-        "babel-eslint": "^10.1.0",
-        "eslint": "^6.7.2",
-        "eslint-plugin-vue": "^6.2.2",
+        "@babel/core": "^7.12.16",
+        "@babel/eslint-parser": "^7.12.16",
+        "@vue/cli-plugin-babel": "~5.0.0",
+        "@vue/cli-plugin-eslint": "~5.0.0",
+        "@vue/cli-plugin-router": "~5.0.0",
+        "@vue/cli-service": "~5.0.0",
+        "eslint": "^7.32.0",
+        "eslint-plugin-vue": "^8.0.3",
         "sass": "~1.32.0",
         "sass-loader": "^10.0.0",
         "vue-cli-plugin-vuetify": "~2.5.8",
-        "vue-template-compiler": "^2.6.11",
+        "vue-template-compiler": "^2.6.14",
         "vuetify-loader": "^1.7.0"
     }
 }

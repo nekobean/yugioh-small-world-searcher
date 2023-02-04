@@ -23,7 +23,9 @@
     },
     "deck": {
         "title": "Deck",
-        "text": "Cards added to the deck display here."
+        "text": "Cards added to the deck display here.",
+        "copyURL": "Copy Deck URL",
+        "clear": "Clear"
     },
     "relayMonster": {
         "title": "Relay Card Search",
