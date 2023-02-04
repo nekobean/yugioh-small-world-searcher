@@ -381,9 +381,9 @@
         :headers="patternsTableHeader()"
         :items="filteredPatterns"
         :sort-by.sync="patternsSortBy"
-        disable-pagination
-        hide-default-footer
         :mobile-breakpoint="0"
+        :footer-props="{ 'items-per-page-options': [20, 30, 50, -1] }"
+        :items-per-page="30"
         dense
         class="mt-5 patterns-table"
       >
@@ -487,13 +487,16 @@ export default {
 
     cyConfig: {
       container: null,
-      maxZoom: 1,
+      maxZoom: 2.0,
+      //wheelSensitivity: 0.05,
+      userPanningEnabled: false,
+      userZoomingEnabled: false,
       style: cytoscape
         .stylesheet()
         .selector("node")
         .style({
-          height: 30,
-          width: 30,
+          height: 25,
+          width: 25,
           shape: "ellipse",
           content: "data(name)",
           "border-color": "black",
@@ -501,11 +504,19 @@ export default {
           "border-opacity": 0.5,
           "text-valign": "bottom",
           "text-halign": "center",
+          "text-background-padding": "3px",
+          "text-background-color": "white",
+          "text-background-opacity": 0.8,
+          "text-margin-y": "8px",
         })
         .selector("edge")
         .style({
           width: 3,
           "line-color": "data(color)",
+          color: "#b0752e",
+          "text-background-padding": "3px",
+          "text-background-color": "white",
+          "text-background-opacity": 0.8,
         }),
       elements: {
         nodes: [],
@@ -870,7 +881,6 @@ export default {
       this.cyConfig.elements.nodes = nodes;
       this.cyConfig.elements.edges = edges;
       let cy = cytoscape(this.cyConfig);
-      cy.userZoomingEnabled(false);
 
       this.graphImage = cy.png({ bg: "#ffffff" });
 
