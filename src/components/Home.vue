@@ -240,9 +240,14 @@
 
       <div id="cy" class="mt-3" />
 
-      <!-- <v-btn color="primary" class="mt-3" @click="downloadGraphImage">
+      <v-btn
+        v-if="!isMobile"
+        color="primary"
+        class="mt-3"
+        @click="downloadGraphImage"
+      >
         {{ $t("graph.downloadGraphImage") }}
-      </v-btn> -->
+      </v-btn>
     </div>
 
     <!-- 
@@ -264,7 +269,7 @@
     <h2 class="header-name text-h6 mt-3">{{ $t("patternTable.title") }}</h2>
 
     <div class="ps-2 pt-2">
-      <p>{{ $t("patternTable.text") }}</p>
+      <p v-html="$t('patternTable.text')"></p>
 
       <v-simple-table>
         <thead>
@@ -371,6 +376,7 @@ export default {
 
   computed: {
     filteredPatterns: function () {
+      // パターン表でサーチ元とサーチ先が同じものは除外するため
       return this.patterns.filter((x) => x.src != x.dst);
     },
   },
@@ -764,7 +770,7 @@ export default {
       let cy = cytoscape(this.cyConfig);
       cy.userZoomingEnabled(false);
 
-      //this.graphImage = cy.png({ bg: "#ffffff" });
+      this.graphImage = cy.png({ bg: "#ffffff" });
 
       this.createPatternTable(cy);
     },
