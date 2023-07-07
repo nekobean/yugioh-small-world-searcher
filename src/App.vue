@@ -5,7 +5,7 @@
         <h1 class="text-h5">{{ $t("header.appTitle") }}</h1>
         <span class="subtitle-1">
           {{ $t("header.appVersion") }}: {{ version }}
-          {{ $t("header.cardDataUpdateDate") }}: 2023/3/20
+          {{ $t("header.cardDataUpdateDate") }}: 2023/4/22
         </span>
       </div>
       <v-radio-group
@@ -48,7 +48,7 @@
       <router-view />
     </v-main>
 
-    <v-footer padless>
+    <v-footer padless style="min-width: 1200px">
       <v-col class="text-center" cols="12">
         {{ $t("appendix.github") }}:
         <a

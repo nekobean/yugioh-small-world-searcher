@@ -10,7 +10,7 @@ This application is available on [this site](https://pystyle.info/apps/yugioh-sm
 * 中継ぎカード検索
 
 ## Card Data
-Updated on 2023/3/20
+Updated on 2023/4/22
 
 ## Project setup
 ```

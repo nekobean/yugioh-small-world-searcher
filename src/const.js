@@ -55,6 +55,7 @@ const jaIdToMonsterRace = Object.freeze({
     23: "創造神族",
     24: "幻竜族",
     25: "サイバース族",
+    26: "幻想魔族",
 })
 
 const jaIdToMonsterAttr = Object.freeze({
@@ -124,6 +125,7 @@ const enIdToMonsterRace = Object.freeze({
     23: "Creation God",
     24: "Wyrm",
     25: "Cyberse",
+    26: "Illusionist",
 })
 
 const enIdToMonsterAttr = Object.freeze({

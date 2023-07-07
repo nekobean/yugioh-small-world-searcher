@@ -21,6 +21,15 @@
           {{ $t("overview.tweet") }}
         </ShareNetwork></v-btn
       >
+
+      <hr class="my-3" />
+
+      <div style="height: 500px">
+        <Adsense
+          data-ad-client="ca-pub-9930040906284502"
+          data-ad-slot="9160643683"
+        />
+      </div>
     </div>
 
     <!-- 
@@ -38,7 +47,7 @@
     <h2 class="header-name text-h6 mt-3">{{ $t("addMonster.title") }}</h2>
 
     <div class="ps-2 pt-2">
-      <p>{{ $t("addMonster.text") }}</p>
+      <p v-html="$t('addMonster.text')"></p>
 
       <!-- カード名入力欄 -->
       <v-text-field
