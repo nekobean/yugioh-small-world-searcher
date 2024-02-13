@@ -565,7 +565,7 @@ export default {
 
     // カードデータを読み込む。
     loadCardData() {
-      const filePath = `${this.appDir}/${this.$i18n.locale}_monsters_20240121.json`;
+      const filePath = `${this.appDir}/${this.$i18n.locale}_monsters_20240213.json`;
       this.axios.get(filePath).then((res) => {
         this.monsters = res.data;
 
