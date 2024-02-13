@@ -48,6 +48,9 @@
         "showVertexCheckbox": {
             "label": "Show edge label"
         },
+        "showCardImageCheckbox": {
+            "label": "Show card illust"
+        },
         "edgeLabel": {
             "level": "level",
             "attack": "attack",
