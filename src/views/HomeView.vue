@@ -9,15 +9,25 @@
       <p class="ma-0" v-html="$t('overview.text')"></p>
       <p class="ma-0" v-html="$t('overview.text2')"></p>
       <div class="mt-3">
-        <p class="ma-0">バージョン 1.3.1 (2023/11/7): 汎用カードを追加するショートカットボタンを追加、画像保存ボタンをクリックした場合に、点の位置を動かした状態が反映されるように修正</p>
-        <p class="ma-0">バージョン 1.4.0 (2023/11/9): カードイラストを表示する機能を追加</p>
-        <p class="ma-0">2024/2/13: カードデータ更新</p>
+        <p class="ma-0">
+          バージョン 1.3.1 (2023/11/7):
+          汎用カードを追加するショートカットボタンを追加、画像保存ボタンをクリックした場合に、点の位置を動かした状態が反映されるように修正
+        </p>
+        <p class="ma-0">
+          バージョン 1.4.0 (2023/11/9): カードイラストを表示する機能を追加
+        </p>
+        <p class="ma-0">2024/11/3: カードデータ更新</p>
       </div>
 
       <v-btn color="#34c6eb" class="mt-3 ml-3" light rounded dark>
-        <ShareNetwork network="twitter" :url="pageUrl" :title="'【' + $t('header.appTitle') + '】'"
-          :description="$t('overview.tweetDescription')" :hashtags="$t('overview.tweetHashtags')"
-          style="text-decoration: none; color: inherit">
+        <ShareNetwork
+          network="twitter"
+          :url="pageUrl"
+          :title="'【' + $t('header.appTitle') + '】'"
+          :description="$t('overview.tweetDescription')"
+          :hashtags="$t('overview.tweetHashtags')"
+          style="text-decoration: none; color: inherit"
+        >
           {{ $t("overview.tweet") }}
         </ShareNetwork>
       </v-btn>
@@ -25,7 +35,10 @@
       <hr class="my-3" />
 
       <div style="height: 500px">
-        <Adsense data-ad-client="ca-pub-9930040906284502" data-ad-slot="9160643683" />
+        <Adsense
+          data-ad-client="ca-pub-9930040906284502"
+          data-ad-slot="9160643683"
+        />
       </div>
     </div>
 
@@ -47,15 +60,32 @@
       <p v-html="$t('addMonster.text')"></p>
 
       <!-- カード名入力欄 -->
-      <v-text-field ref="monsterNameInput" :label="$t('addMonster.monsterNameInput.label')"
-        :placeholder="$t('addMonster.monsterNameInput.placeholder')" clearable dense hide-details outlined
-        persistent-placeholder style="width: 500px" @input="updateMonsterCandidates" append-icon="mdi-magnify">
+      <v-text-field
+        ref="monsterNameInput"
+        :label="$t('addMonster.monsterNameInput.label')"
+        :placeholder="$t('addMonster.monsterNameInput.placeholder')"
+        clearable
+        dense
+        hide-details
+        outlined
+        persistent-placeholder
+        style="width: 500px"
+        @input="updateMonsterCandidates"
+        append-icon="mdi-magnify"
+      >
       </v-text-field>
 
       <!-- カード一覧 -->
-      <v-data-table v-if="deckCandidates.length" :footer-props="{ 'items-per-page-options': [15, 20, 50, -1] }"
-        :headers="monstersTableHeader('add')" :items-per-page="15" :items="deckCandidates" :mobile-breakpoint="0"
-        class="mt-5" dense>
+      <v-data-table
+        v-if="deckCandidates.length"
+        :footer-props="{ 'items-per-page-options': [15, 20, 50, -1] }"
+        :headers="monstersTableHeader('add')"
+        :items-per-page="15"
+        :items="deckCandidates"
+        :mobile-breakpoint="0"
+        class="mt-5"
+        dense
+      >
         <!-- カード名 -->
         <template #[`item.name`]="{ item }">
           <a :href="officialUrl(item.id)" target="_blank">
@@ -82,18 +112,31 @@
 
         <!-- 追加ボタン -->
         <template #[`item.add`]="{ item }">
-          <v-btn @click="
-            addMonster(item);
-          updateUrl();
-          " color="primary" small>{{ $t("monstersTable.addButton") }}</v-btn>
+          <v-btn
+            @click="
+              addMonster(item);
+              updateUrl();
+            "
+            color="primary"
+            small
+            >{{ $t("monstersTable.addButton") }}</v-btn
+          >
         </template>
       </v-data-table>
 
-      <div class="mt-3" style="max-width: 800px;" v-if="monsters">
-        <v-btn v-for="monsterId in monsterIds" :key="monsterId" @click="
-          addMonsterById(monsterId);
-        updateUrl();
-        " color="success" small class="mr-2 mt-3">{{ getMonsterName(monsterId) }}</v-btn>
+      <div class="mt-3" style="max-width: 800px" v-if="monsters">
+        <v-btn
+          v-for="monsterId in monsterIds"
+          :key="monsterId"
+          @click="
+            addMonsterById(monsterId);
+            updateUrl();
+          "
+          color="success"
+          small
+          class="mr-2 mt-3"
+          >{{ getMonsterName(monsterId) }}</v-btn
+        >
       </div>
     </div>
 
@@ -106,8 +149,15 @@
     <div class="ps-2 pt-2">
       <p v-html="$t('deck.text')"></p>
 
-      <v-data-table v-if="deck.length" :headers="monstersTableHeader('delete')" :items="deck" :mobile-breakpoint="0" dense
-        disable-pagination hide-default-footer>
+      <v-data-table
+        v-if="deck.length"
+        :headers="monstersTableHeader('delete')"
+        :items="deck"
+        :mobile-breakpoint="0"
+        dense
+        disable-pagination
+        hide-default-footer
+      >
         <!-- カード名 -->
         <template #[`item.name`]="{ item }">
           <a :href="officialUrl(item.id)" target="_blank">
@@ -134,10 +184,15 @@
 
         <!-- 削除ボタン -->
         <template #[`item.delete`]="{ item }">
-          <v-btn @click="
-            deleteMonster(item);
-          updateUrl();
-          " color="primary" small>{{ $t("monstersTable.deleteButton") }}</v-btn>
+          <v-btn
+            @click="
+              deleteMonster(item);
+              updateUrl();
+            "
+            color="primary"
+            small
+            >{{ $t("monstersTable.deleteButton") }}</v-btn
+          >
         </template>
       </v-data-table>
 
@@ -145,14 +200,31 @@
         {{ $t("deck.clear") }}
       </v-btn>
 
-      <v-btn color="primary" class="mt-3 ml-3" v-clipboard:copy="deckUrl" :disabled="!this.deck.length">
+      <v-btn
+        color="primary"
+        class="mt-3 ml-3"
+        v-clipboard:copy="deckUrl"
+        :disabled="!this.deck.length"
+      >
         {{ $t("deck.copyURL") }}
       </v-btn>
 
-      <v-btn color="#34c6eb" class="mt-3 ml-3" :disabled="!this.deck.length" light rounded dark>
-        <ShareNetwork network="twitter" :url="deckUrl" :title="'【' + $t('header.appTitle') + '】'"
-          :description="$t('deck.tweetDescription')" :hashtags="$t('deck.tweetHashtags')"
-          style="text-decoration: none; color: inherit">{{ $t("deck.tweet") }}
+      <v-btn
+        color="#34c6eb"
+        class="mt-3 ml-3"
+        :disabled="!this.deck.length"
+        light
+        rounded
+        dark
+      >
+        <ShareNetwork
+          network="twitter"
+          :url="deckUrl"
+          :title="'【' + $t('header.appTitle') + '】'"
+          :description="$t('deck.tweetDescription')"
+          :hashtags="$t('deck.tweetHashtags')"
+          style="text-decoration: none; color: inherit"
+          >{{ $t("deck.tweet") }}
         </ShareNetwork>
       </v-btn>
     </div>
@@ -168,20 +240,43 @@
       <p>{{ $t("relayMonster.text") }}</p>
 
       <v-list v-for="card in deck" :key="card.id">
-        <v-checkbox v-model="relayCardIds" :label="card.name" :value="card.id" class="ma-0 pa-0" hide-details
-          @change="updateRelayCandidates"></v-checkbox>
+        <v-checkbox
+          v-model="relayCardIds"
+          :label="card.name"
+          :value="card.id"
+          class="ma-0 pa-0"
+          hide-details
+          @change="updateRelayCandidates"
+        ></v-checkbox>
       </v-list>
 
       <template v-if="relayCandidates.length">
         <p>{{ $t("relayMonster.text2") }}</p>
 
-        <v-text-field ref="keywordInput" :label="$t('relayMonster.keywordInput.label')"
-          :placeholder="$t('relayMonster.keywordInput.placeholder')" append-icon="mdi-magnify" clearable dense
-          hide-details outlined persistent-placeholder style="width: 500px" @input="filterRelayCandidates"></v-text-field>
+        <v-text-field
+          ref="keywordInput"
+          :label="$t('relayMonster.keywordInput.label')"
+          :placeholder="$t('relayMonster.keywordInput.placeholder')"
+          append-icon="mdi-magnify"
+          clearable
+          dense
+          hide-details
+          outlined
+          persistent-placeholder
+          style="width: 500px"
+          @input="filterRelayCandidates"
+        ></v-text-field>
 
-        <v-data-table v-if="filteredRelayCandidates.length" :footer-props="{ 'items-per-page-options': [15, 20, 50, -1] }"
-          :headers="monstersTableHeader('add')" :items-per-page="15" :items="filteredRelayCandidates"
-          :mobile-breakpoint="0" class="mt-5" dense>
+        <v-data-table
+          v-if="filteredRelayCandidates.length"
+          :footer-props="{ 'items-per-page-options': [15, 20, 50, -1] }"
+          :headers="monstersTableHeader('add')"
+          :items-per-page="15"
+          :items="filteredRelayCandidates"
+          :mobile-breakpoint="0"
+          class="mt-5"
+          dense
+        >
           <!-- カード名 -->
           <template #[`item.name`]="{ item }">
             <a :href="officialUrl(item.id)" target="_blank">
@@ -210,10 +305,15 @@
 
           <!-- 追加ボタン -->
           <template #[`item.add`]="{ item }">
-            <v-btn @click="
-              addMonster(item);
-            updateUrl();
-            " color="primary" small>{{ $t("monstersTable.addButton") }}</v-btn>
+            <v-btn
+              @click="
+                addMonster(item);
+                updateUrl();
+              "
+              color="primary"
+              small
+              >{{ $t("monstersTable.addButton") }}</v-btn
+            >
           </template>
         </v-data-table>
       </template>
@@ -229,28 +329,59 @@
 
       <div class="d-flex">
         <!-- 辺のラベルを表示するかどうか -->
-        <v-checkbox v-model="showEdgeLabel" :label="$t('graph.showVertexCheckbox.label')" @click="updateEdgeLabel"
-          hide-details></v-checkbox>
+        <v-checkbox
+          v-model="showEdgeLabel"
+          :label="$t('graph.showVertexCheckbox.label')"
+          @click="updateEdgeLabel"
+          hide-details
+        ></v-checkbox>
 
         <!-- カード画像を表示するかどうか -->
-        <v-checkbox class="ml-2" v-model="showCardImage" :label="$t('graph.showCardImageCheckbox.label')"
-          @click="updateCardImage" hide-details></v-checkbox>
+        <v-checkbox
+          class="ml-2"
+          v-model="showCardImage"
+          :label="$t('graph.showCardImageCheckbox.label')"
+          @click="updateCardImage"
+          hide-details
+        ></v-checkbox>
       </div>
 
       <div id="cy" class="mt-3"></div>
 
-      <v-btn v-if="!isMobile" color="primary" class="mt-3" @click="downloadGraphImage">
+      <v-btn
+        v-if="!isMobile"
+        color="primary"
+        class="mt-3"
+        @click="downloadGraphImage"
+      >
         {{ $t("graph.downloadGraphImage") }}
       </v-btn>
 
-      <v-btn color="primary" class="mt-3 ml-3" v-clipboard:copy="deckUrl" :disabled="!this.deck.length">
+      <v-btn
+        color="primary"
+        class="mt-3 ml-3"
+        v-clipboard:copy="deckUrl"
+        :disabled="!this.deck.length"
+      >
         {{ $t("deck.copyURL") }}
       </v-btn>
 
-      <v-btn color="#34c6eb" class="mt-3 ml-3" :disabled="!this.deck.length" light rounded dark>
-        <ShareNetwork network="twitter" :url="deckUrl" :title="'【' + $t('header.appTitle') + '】'"
-          :description="$t('deck.tweetDescription')" :hashtags="$t('deck.tweetHashtags')"
-          style="text-decoration: none; color: inherit">{{ $t("deck.tweet") }}
+      <v-btn
+        color="#34c6eb"
+        class="mt-3 ml-3"
+        :disabled="!this.deck.length"
+        light
+        rounded
+        dark
+      >
+        <ShareNetwork
+          network="twitter"
+          :url="deckUrl"
+          :title="'【' + $t('header.appTitle') + '】'"
+          :description="$t('deck.tweetDescription')"
+          :hashtags="$t('deck.tweetHashtags')"
+          style="text-decoration: none; color: inherit"
+          >{{ $t("deck.tweet") }}
         </ShareNetwork>
       </v-btn>
     </div>
@@ -289,24 +420,46 @@
           <tr v-for="card in deck" :key="card.id">
             <td>{{ card.name }}</td>
             <td>
-              <v-checkbox v-model="srcCardNames" :value="card.name" @change="updateGraph" class="ma-0 pa-0"
-                hide-details></v-checkbox>
+              <v-checkbox
+                v-model="srcCardNames"
+                :value="card.name"
+                @change="updateGraph"
+                class="ma-0 pa-0"
+                hide-details
+              ></v-checkbox>
             </td>
             <td>
-              <v-checkbox v-model="relayCardNames" :value="card.name" @change="updateGraph" class="ma-0 pa-0"
-                hide-details></v-checkbox>
+              <v-checkbox
+                v-model="relayCardNames"
+                :value="card.name"
+                @change="updateGraph"
+                class="ma-0 pa-0"
+                hide-details
+              ></v-checkbox>
             </td>
             <td>
-              <v-checkbox v-model="dstCardNames" :value="card.name" @change="updateGraph" class="ma-0 pa-0"
-                hide-details></v-checkbox>
+              <v-checkbox
+                v-model="dstCardNames"
+                :value="card.name"
+                @change="updateGraph"
+                class="ma-0 pa-0"
+                hide-details
+              ></v-checkbox>
             </td>
           </tr>
         </tbody>
       </v-simple-table>
 
-      <v-data-table :headers="patternsTableHeader()" :items="filteredPatterns" :sort-by.sync="patternsSortBy"
-        :mobile-breakpoint="0" :footer-props="{ 'items-per-page-options': [20, 30, 50, -1] }" :items-per-page="30" dense
-        class="mt-5 patterns-table">
+      <v-data-table
+        :headers="patternsTableHeader()"
+        :items="filteredPatterns"
+        :sort-by.sync="patternsSortBy"
+        :mobile-breakpoint="0"
+        :footer-props="{ 'items-per-page-options': [20, 30, 50, -1] }"
+        :items-per-page="30"
+        dense
+        class="mt-5 patterns-table"
+      >
         <template #[`item.relay`]="{ item }">
           <span v-html="item.relay.join('<br/>')"></span>
         </template>
@@ -380,7 +533,9 @@ export default {
   },
 
   data: () => ({
-    monsterIds: [12950, 9455, 11708, 9278, 13587, 9279, 6980, 14741, 12067, 12070, 8933],
+    monsterIds: [
+      12950, 9455, 11708, 9278, 13587, 9279, 6980, 14741, 12067, 12070, 8933,
+    ],
 
     // モンスターの一覧
     monsters: null,
@@ -421,20 +576,24 @@ export default {
         nodes: [],
         edges: [],
       },
-      style: cytoscape.stylesheet().selector("node").style({
-        height: 25,
-        width: 25,
-        shape: "ellipse",
-        content: "data(name)",
-        "border-color": "black",
-        "border-width": 1,
-        "text-valign": "bottom",
-        "text-halign": "center",
-        "text-background-padding": "3px",
-        "text-background-color": "white",
-        "text-background-opacity": 0.8,
-        "text-margin-y": "8px",
-      }).selector("edge")
+      style: cytoscape
+        .stylesheet()
+        .selector("node")
+        .style({
+          height: 25,
+          width: 25,
+          shape: "ellipse",
+          content: "data(name)",
+          "border-color": "black",
+          "border-width": 1,
+          "text-valign": "bottom",
+          "text-halign": "center",
+          "text-background-padding": "3px",
+          "text-background-color": "white",
+          "text-background-opacity": 0.8,
+          "text-margin-y": "8px",
+        })
+        .selector("edge")
         .style({
           width: 3,
           color: "#b0752e",
@@ -565,7 +724,7 @@ export default {
 
     // カードデータを読み込む。
     loadCardData() {
-      const filePath = `${this.appDir}/${this.$i18n.locale}_monsters_20240213.json`;
+      const filePath = `${this.appDir}/${this.$i18n.locale}_monsters_20241103.json`;
       this.axios.get(filePath).then((res) => {
         this.monsters = res.data;
 
@@ -724,8 +883,7 @@ export default {
         return;
       }
 
-
-      return monster.name
+      return monster.name;
     },
 
     deleteMonster(monster) {
@@ -758,13 +916,13 @@ export default {
             path: this.$route.path,
             query: { card_id: cardIds },
           })
-          .catch(() => { });
+          .catch(() => {});
       } else {
         this.$router
           .push({
             path: this.$route.path,
           })
-          .catch(() => { });
+          .catch(() => {});
       }
     },
 
@@ -815,7 +973,13 @@ export default {
       // ノードを追加する。
       let nodes = [];
       for (const card of this.deck) {
-        nodes.push({ data: { id: card.id, name: card.name, "image": `${this.appDir}/images/${card.id}.jpg` } });
+        nodes.push({
+          data: {
+            id: card.id,
+            name: card.name,
+            image: `${this.appDir}/images/${card.id}.jpg`,
+          },
+        });
       }
 
       // ペアの組み合わせを作成する。
@@ -872,10 +1036,9 @@ export default {
           shape: "ellipse",
           "font-size": "20px",
           "background-image": "data(image)",
-          "background-fit": "contain"
-        })
-      }
-      else {
+          "background-fit": "contain",
+        });
+      } else {
         this.cyConfig.style.selector("node").style({
           height: 25,
           width: 25,
@@ -985,10 +1148,11 @@ export default {
         html += "<tr>";
 
         if (i === 0) {
-          html += `<th rowspan="${this.deck.length
-            }"><span class="vertical-text">${this.$t(
-              "matrixTable.srcHeader"
-            )}</span></th>`;
+          html += `<th rowspan="${
+            this.deck.length
+          }"><span class="vertical-text">${this.$t(
+            "matrixTable.srcHeader"
+          )}</span></th>`;
         }
 
         html += `<th>${this.deck[i].name}</th>`;

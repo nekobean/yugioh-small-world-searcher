@@ -13,7 +13,7 @@ This application is available on [this site](https://pystyle.info/apps/yugioh-sm
 
 ## Card Data
 
-Updated on 2024/2/13
+Updated on 2024/11/3
 
 ## Project setup
 
