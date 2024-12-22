@@ -16,7 +16,7 @@
         <p class="ma-0">
           バージョン 1.4.0 (2023/11/9): カードイラストを表示する機能を追加
         </p>
-        <p class="ma-0">2024/11/3: カードデータ更新</p>
+        <p class="ma-0">2024/12/9: カードデータ更新</p>
       </div>
 
       <v-btn color="#34c6eb" class="mt-3 ml-3" light rounded dark>
@@ -724,7 +724,7 @@ export default {
 
     // カードデータを読み込む。
     loadCardData() {
-      const filePath = `${this.appDir}/${this.$i18n.locale}_monsters_20241103.json`;
+      const filePath = `${this.appDir}/${this.$i18n.locale}_monsters_20241209.json`;
       this.axios.get(filePath).then((res) => {
         this.monsters = res.data;
 
