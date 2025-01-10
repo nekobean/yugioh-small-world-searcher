@@ -5,7 +5,7 @@
         <h1 class="text-h5">{{ $t("header.appTitle") }}</h1>
         <span class="subtitle-1">
           {{ $t("header.appVersion") }}: {{ version }}
-          {{ $t("header.cardDataUpdateDate") }}: 2024/12/9
+          {{ $t("header.cardDataUpdateDate") }}: 2024/1/10
         </span>
       </div>
       <v-radio-group

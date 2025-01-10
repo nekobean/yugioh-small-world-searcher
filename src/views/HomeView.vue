@@ -9,28 +9,8 @@
       <p class="ma-0" v-html="$t('overview.text')"></p>
       <p class="ma-0" v-html="$t('overview.text2')"></p>
       <div class="mt-3">
-        <p class="ma-0">
-          バージョン 1.3.1 (2023/11/7):
-          汎用カードを追加するショートカットボタンを追加、画像保存ボタンをクリックした場合に、点の位置を動かした状態が反映されるように修正
-        </p>
-        <p class="ma-0">
-          バージョン 1.4.0 (2023/11/9): カードイラストを表示する機能を追加
-        </p>
-        <p class="ma-0">2024/12/9: カードデータ更新</p>
+        <p class="ma-0">2024/1/10: カードデータ更新</p>
       </div>
-
-      <v-btn color="#34c6eb" class="mt-3 ml-3" light rounded dark>
-        <ShareNetwork
-          network="twitter"
-          :url="pageUrl"
-          :title="'【' + $t('header.appTitle') + '】'"
-          :description="$t('overview.tweetDescription')"
-          :hashtags="$t('overview.tweetHashtags')"
-          style="text-decoration: none; color: inherit"
-        >
-          {{ $t("overview.tweet") }}
-        </ShareNetwork>
-      </v-btn>
 
       <hr class="my-3" />
 
@@ -49,6 +29,20 @@
 
     <div class="ps-2 pt-2">
       <p class="ma-0">{{ $t("usage.text") }}</p>
+    </div>
+
+    <!--
+        関連ツール
+    -->
+    <h2 class="header-name text-h6 mt-3">関連ツール</h2>
+
+    <div class="ps-2 pt-2">
+      <a
+        href="https://pystyle.info/apps/yugioh-sec-calculator/"
+        style="font-size: 150%"
+      >
+        <strong>遊戯王 - 連慄砲固定式 計算ツール</strong>
+      </a>
     </div>
 
     <!--
@@ -210,22 +204,15 @@
       </v-btn>
 
       <v-btn
-        color="#34c6eb"
+        color="#000000"
         class="mt-3 ml-3"
         :disabled="!this.deck.length"
         light
         rounded
         dark
+        @click="tweetUrlClicked"
       >
-        <ShareNetwork
-          network="twitter"
-          :url="deckUrl"
-          :title="'【' + $t('header.appTitle') + '】'"
-          :description="$t('deck.tweetDescription')"
-          :hashtags="$t('deck.tweetHashtags')"
-          style="text-decoration: none; color: inherit"
-          >{{ $t("deck.tweet") }}
-        </ShareNetwork>
+        {{ $t("deck.tweet") }}
       </v-btn>
     </div>
 
@@ -367,22 +354,15 @@
       </v-btn>
 
       <v-btn
-        color="#34c6eb"
+        color="#000000"
         class="mt-3 ml-3"
         :disabled="!this.deck.length"
         light
         rounded
         dark
+        @click="tweetUrlClicked"
       >
-        <ShareNetwork
-          network="twitter"
-          :url="deckUrl"
-          :title="'【' + $t('header.appTitle') + '】'"
-          :description="$t('deck.tweetDescription')"
-          :hashtags="$t('deck.tweetHashtags')"
-          style="text-decoration: none; color: inherit"
-          >{{ $t("deck.tweet") }}
-        </ShareNetwork>
+        {{ $t("deck.tweet") }}
       </v-btn>
     </div>
 
@@ -548,7 +528,7 @@ export default {
     // 辺のラベルを隠すかどうか
     showEdgeLabel: false,
     // モンスター画像を表示するかどうか
-    showCardImage: false,
+    showCardImage: true,
     patternsSortBy: "dst",
     debugMode: location.hostname === "localhost",
     graphImage: null,
@@ -724,7 +704,7 @@ export default {
 
     // カードデータを読み込む。
     loadCardData() {
-      const filePath = `${this.appDir}/${this.$i18n.locale}_monsters_20241209.json`;
+      const filePath = `${this.appDir}/${this.$i18n.locale}_monsters_20250110.json`;
       this.axios.get(filePath).then((res) => {
         this.monsters = res.data;
 
@@ -751,7 +731,9 @@ export default {
         // クエリのカード ID を取得する。
         let cardIds = [];
         if (this.$route.query.card_id) {
-          const tokens = this.$route.query.card_id.split(",");
+          const tokens = decodeURIComponent(this.$route.query.card_id).split(
+            ","
+          );
           for (const token of tokens) {
             cardIds.push(Number(token));
           }
@@ -914,7 +896,7 @@ export default {
         this.$router
           .push({
             path: this.$route.path,
-            query: { card_id: cardIds },
+            query: { card_id: encodeURIComponent(cardIds) },
           })
           .catch(() => {});
       } else {
@@ -970,6 +952,27 @@ export default {
     },
 
     updateGraph() {
+      if (this.showCardImage) {
+        this.cyConfig.style.selector("node").style({
+          height: 80,
+          width: 80,
+          shape: "ellipse",
+          "font-size": "20px",
+          "background-image": "data(image)",
+          "background-fit": "contain",
+        });
+      } else {
+        this.cyConfig.style.selector("node").style({
+          height: 25,
+          width: 25,
+          shape: "ellipse",
+          content: "data(name)",
+          "font-size": "15px",
+          "background-image": "404.jpg",
+          "background-fit": "contain",
+        });
+      }
+
       // ノードを追加する。
       let nodes = [];
       for (const card of this.deck) {
@@ -1026,6 +1029,15 @@ export default {
       }
 
       this.updateGraph();
+    },
+
+    tweetUrlClicked() {
+      let text = "";
+      text += "【遊戯王 -スモールワールド検索ツール】\n";
+      text += window.location.href + "\n\n";
+      text += "#遊戯王 #マスターデュエル";
+      const url = `https://x.com/intent/tweet?text=${encodeURIComponent(text)}`;
+      window.open(url, "_blank");
     },
 
     updateCardImage() {
