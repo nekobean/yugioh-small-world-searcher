@@ -1,14 +1,24 @@
-import React from "react";
 import packageJson from "../../package.json";
 
 const Jumbotron = () => {
   return (
-    <div className="bg-green-300/50 shadow-lg backdrop-blur-lg p-8 border border-white/15 rounded-xl text-black">
-      <h1 className="font-bold text-4xl">遊戯王 スモールワールド検索ツール</h1>
-      <p className="mt-1 text-lg">
-        バージョン: {packageJson.version} カードデータ更新日: 2025/3/1
-      </p>
+    <section className="bg-blue-500 shadow-2xl backdrop-blur-lg p-10 rounded-2xl text-white">
+      {/* Title */}
+      <div className="flex">
+        <img
+          src="/small_world.png"
+          alt="Small World"
+          className="mr-3 w-12 aspect-auto"
+        />
+        <div>
+          <h1 className="font-bold text-4xl">遊戯王 スモールワールド検索ツール</h1>
+          <p className="mt-1 text-lg">
+            バージョン: {packageJson.version} カードデータ更新日: 2025/3/1
+          </p>
+        </div>
+      </div>
 
+      {/* Description */}
       <div className="mt-3">
         <p className="text-lg">
           <a
@@ -25,7 +35,7 @@ const Jumbotron = () => {
           を参照してください。
         </p>
         <p className="text-lg">
-          不具合報告、機能追加の要望、ご質問はこちらの記事の
+          不具合報告、機能追加の要望、ご質問はこちらの
           <a
             href="https://pystyle.info/yugioh-small-world-searcher/#respond"
             target="_blank"
@@ -35,8 +45,7 @@ const Jumbotron = () => {
           にお願いします。
         </p>
       </div>
-    </div>
-    // </section>
+    </section>
   );
 };
 

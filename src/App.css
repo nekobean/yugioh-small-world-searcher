@@ -1,10 +1,10 @@
 a {
-  color: #3498db;
+  color: #f6e05e;
   text-decoration: none;
 }
 
 a:hover {
-  color: #2980b9;
+  color: #ecc94b;
   text-decoration: underline;
   font-weight: bold;
 }
