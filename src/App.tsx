@@ -1,3 +1,5 @@
+import { Button } from "@/components/ui/button";
+
 function App() {
   return (
     <>
@@ -7,6 +9,7 @@ function App() {
           <p className="text-gray-700">
             This is a sample component styled with Tailwind CSS.
           </p>
+          <Button>Click me</Button>
         </div>
       </div>
     </>
