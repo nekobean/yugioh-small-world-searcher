@@ -1,9 +1,9 @@
-a {
+a.link {
   color: #f6e05e;
   text-decoration: none;
 }
 
-a:hover {
+a.link:hover {
   color: #ecc94b;
   text-decoration: underline;
   font-weight: bold;
