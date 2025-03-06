@@ -1,17 +1,15 @@
 import { Button } from "@/components/ui/button";
+import { Jumbotron } from "@/pages/jumbotron";
+import "./App.css";
 
 function App() {
   return (
     <>
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-        <div className="bg-white p-8 rounded-lg shadow-lg">
-          <h1 className="text-2xl font-bold mb-4">Hello, Tailwind CSS!</h1>
-          <p className="text-gray-700">
-            This is a sample component styled with Tailwind CSS.
-          </p>
-          <Button>Click me</Button>
+      <main className="h-screen w-full bg-gray-200">
+        <div className="container mx-auto px-6 py-12">
+          <Jumbotron />
         </div>
-      </div>
+      </main>
     </>
   );
 }

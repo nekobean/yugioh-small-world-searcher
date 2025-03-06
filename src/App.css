@@ -1,0 +1,10 @@
+a {
+  color: #3498db;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #2980b9;
+  text-decoration: underline;
+  font-weight: bold;
+}
