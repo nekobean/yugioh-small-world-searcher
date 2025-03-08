@@ -55,7 +55,7 @@ const ResultGraphSection: React.FC<ResultGraphSectionProps> = ({ className, deck
       </div>
 
       {/* グラフ */}
-      <div className="bg-white mt-3 border-8 border-emerald-400 rounded-md w-full h-[600px]">
+      <div className="bg-white mt-3 border-8 border-emerald-400 rounded-md w-full max-h-[800px] aspect-video">
         <div id="cy"></div>
       </div>
 

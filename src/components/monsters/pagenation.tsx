@@ -24,7 +24,7 @@ export function DataTablePagination<TData>({ table, className }: DataTablePagina
   );
 
   return (
-    <div className={cn("flex justify-between items-center", className)}>
+    <div className={cn("flex justify-between flex-wrap items-center", className)}>
       {/* ページ数 */}
       <div className="font-medium text-sm">
         {currLastRow}件 / {table.getRowCount()}件
