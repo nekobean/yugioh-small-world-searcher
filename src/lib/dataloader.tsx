@@ -1,5 +1,4 @@
 import * as yugioh from "@/lib/yugioh";
-import React, { JSX } from "react";
 
 export interface Monster {
   id: number;
@@ -16,16 +15,14 @@ export interface Monster {
   sanitizedRuby: string;
 }
 
-function sanitizeString(s: string): string {
+export function sanitizeString(s: string): string {
   // 全角英数字は半角英数字に変換する。
   s = s.replace(/[\uff21-\uff3a\uff41-\uff5a\uff10-\uff19]/g, (c) =>
     String.fromCharCode(c.charCodeAt(0) - 0xfee0)
   );
 
   // カタカナはひらがなに変換する。
-  s = s.replace(/[\u30a1-\u30f6]/g, (c) =>
-    String.fromCharCode(c.charCodeAt(0) - 0x0060)
-  );
+  s = s.replace(/[\u30a1-\u30f6]/g, (c) => String.fromCharCode(c.charCodeAt(0) - 0x0060));
 
   // 半角大文字英数字は小文字にする。
   s = s.toLowerCase();
@@ -58,63 +55,28 @@ function parseMonsterList(monsters: any): Monster[] {
   return monsters;
 }
 
-export function loadMonsterList(
-  filePath: string,
-  setMonsters: (monsters: Monster[]) => void
-) {
+export function loadMonsterList(filePath: string, setMonsters: (monsters: Monster[]) => void) {
   fetch(filePath)
     .then((response) => response.json())
     .then((data) => setMonsters(parseMonsterList(data)))
     .catch((error) => console.error("Failed to load json.", error));
 }
 
-function isMonsterNameMatched(card: Monster, keywords: string[]): boolean {
-  return keywords.every(
-    (x) => card.sanitizedName.includes(x) || card.sanitizedRuby.includes(x)
-  );
-}
-
-export function searchMonsters(
-  monsters: Monster[],
-  keyword: string,
-  limit: number = 100
-): Monster[] {
-  if (!monsters.length || !keyword.trim()) {
-    return [];
-  }
-
-  const keywords = keyword.split(" ").map(sanitizeString).filter(Boolean);
-
-  const candidates = [];
-  for (const monster of monsters) {
-    if (isMonsterNameMatched(monster, keywords)) {
-      candidates.push(monster);
-    }
-
-    if (candidates.length >= limit) {
-      break;
-    }
-  }
-
-  return candidates;
-}
-
 export function officialUrl(card_id: number): string {
   return `https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=${card_id}&request_locale=ja`;
 }
 
-export function formatCardText(text: string): JSX.Element {
-  // "①～⑨："を改行する。
-  const splitedText = text.replace(/([\u2460-\u2468])：/g, "\n$1").split("\n");
+export function formatCardText(text: string) {
+  // "①～⑨："で分割する。
+  const splittedText = text.split(/(?=[\u2460-\u2468]：)/);
 
   return (
     <>
-      {splitedText.map((x, index) => (
-        <React.Fragment key={index}>
-          {x}
-          <br />
-        </React.Fragment>
-      ))}
+      <div className="space-y-2">
+        {splittedText.map((x, index) => (
+          <p key={index}>{x}</p>
+        ))}
+      </div>
     </>
   );
 }
