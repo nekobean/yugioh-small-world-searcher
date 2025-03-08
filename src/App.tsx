@@ -8,6 +8,7 @@ import { getDeckURL, loadMonsterList, Monster } from "@/lib/dataloader";
 import { AdvertisementSection } from "./pages/adsense-section";
 import { AddMonsterSection } from "./pages/add-monster-section";
 import { RelayMonsterSection } from "./pages/relay-monster-section";
+import { ResultGraphSection } from "./pages/result-graph-section";
 
 function App() {
   const [monsters, setMonsters] = useState<Monster[]>([]);
@@ -72,6 +73,7 @@ function App() {
           <AddMonsterSection className="mt-6" monsters={monsters} addMonster={addMonster} />
           <DeckSection className="mt-6" deck={deck} deleteMonster={deleteMonster} />
           <RelayMonsterSection className="mt-6" monsters={monsters} addMonster={addMonster} />
+          <ResultGraphSection className="mt-6" deck={deck} />
         </div>
       </main>
     </>

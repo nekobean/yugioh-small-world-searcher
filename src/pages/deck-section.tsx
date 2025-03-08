@@ -25,6 +25,7 @@ const DeckSection: React.FC<DeckSectionProps> = ({ className, deck, deleteMonste
 
       <DataTable columns={deleteMonsterColumns} data={deck} className="mt-3" type="deck" />
 
+      {/* アクション */}
       <div className="space-y-2 mt-3">
         <div className="flex gap-2">
           <Button onClick={() => deleteMonster(deck.map((monster) => monster.id))}>
