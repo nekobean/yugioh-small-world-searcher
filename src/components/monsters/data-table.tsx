@@ -24,7 +24,7 @@ import { Button } from "@/components/ui/button";
 interface DataTableProps<TData, TValue> extends React.HTMLAttributes<HTMLDivElement> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  type: "add" | "deck";
+  type: "add" | "deck" | "relay";
 }
 
 export function DataTable<TData, TValue>({
@@ -42,7 +42,7 @@ export function DataTable<TData, TValue>({
     getFilteredRowModel: getFilteredRowModel(),
     initialState: {
       pagination: {
-        pageSize: type == "add" ? 10 : 100,
+        pageSize: type == "deck" ? 100 : 10,
       },
     },
   });
@@ -50,15 +50,19 @@ export function DataTable<TData, TValue>({
   return (
     <div className={className}>
       {/* Filtering */}
-      {type === "add" && (
+      {type !== "deck" && (
         <div>
           <label htmlFor="card-search" className="text-sm">
-            モンスター名を入力（読み仮名でも可）
+            {type === "add"
+              ? "モンスター名を入力（読み仮名でも可）"
+              : "キーワードを入力 (カード名、種族、属性、種類 / 空白区切りで複数指定可)"}
           </label>
           <div className="relative max-w-sm">
             <Input
               id="card-search"
-              placeholder="例: とらいぶりげーと"
+              placeholder={
+                type === "add" ? "例: とらいぶりげーと" : "例: 光属性 ドラゴン チューナー"
+              }
               value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
               className="bg-white mt-1 w-full text-black"
               onChange={(event) => table.getColumn("name")?.setFilterValue(event.target.value)}
@@ -123,7 +127,7 @@ export function DataTable<TData, TValue>({
       </div>
 
       {/* Pagination */}
-      {type === "add" && <DataTablePagination table={table} className="mt-3" />}
+      {type !== "deck" && <DataTablePagination table={table} className="mt-3" />}
     </div>
   );
 }

@@ -8,7 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface AddMonsterSectionProps extends React.HTMLAttributes<HTMLTableSectionElement> {
   monsters: Monster[];
-  addMonster: (card_id: number) => void;
+  addMonster: (card_id: number | number[]) => void;
 }
 
 const AddMonsterSection: React.FC<AddMonsterSectionProps> = ({
@@ -40,7 +40,7 @@ const AddMonsterSection: React.FC<AddMonsterSectionProps> = ({
 
       <ul className="mt-3 text-lg list-disc list-inside">
         <li>
-          カード名を入力すると、候補が表示されます。「追加」ボタンをクリックして、デッキに追加してください。（例:
+          カード名を入力すると、絞り込みが行えます。「追加」ボタンをクリックして、デッキに追加してください。（例:
           "鉄獣"、"とらいぶりげーど"）
         </li>
         <li>OCG 未実装のカードは英語名で検索してください。（例: "ゴーティス"なら"ghoti"）</li>

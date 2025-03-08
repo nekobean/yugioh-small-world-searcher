@@ -4,8 +4,8 @@ export interface Monster {
   id: number;
   name: string;
   ruby: string;
-  race: number;
-  attr: number;
+  race: string;
+  attr: string;
   level: number;
   atk: number | "-" | "?";
   def: number | "-" | "?";
@@ -13,6 +13,7 @@ export interface Monster {
   text: string;
   sanitizedName: string;
   sanitizedRuby: string;
+  sanitizedProp: string[];
 }
 
 export function sanitizeString(s: string): string {
@@ -43,13 +44,24 @@ export function sanitizeString(s: string): string {
   return s;
 }
 
-function parseMonsterList(monsters: any): Monster[] {
-  for (let monster of monsters) {
-    monster.sanitizedName = sanitizeString(monster.name);
-    monster.sanitizedRuby = monster.ruby !== null ? sanitizeString(monster.ruby) : "";
-    monster.prop = monster.prop.map((x: number) => yugioh.JA_ID_TO_MONSTER_PROP[x]);
-    monster.race = yugioh.JA_ID_TO_MONSTER_RACE[monster.race];
-    monster.attr = yugioh.JA_ID_TO_MONSTER_ATTR[monster.attr];
+function parseMonsterList(data: any): Monster[] {
+  let monsters = [];
+  for (let row of data) {
+    monsters.push({
+      id: row.id,
+      name: row.name,
+      ruby: row.ruby ? row.ruby : "",
+      race: yugioh.JA_ID_TO_MONSTER_RACE[row.race],
+      attr: yugioh.JA_ID_TO_MONSTER_ATTR[row.attr],
+      level: row.level,
+      atk: row.atk,
+      def: row.def,
+      prop: row.prop.map((x: number) => yugioh.JA_ID_TO_MONSTER_PROP[x]),
+      text: row.text,
+      sanitizedName: sanitizeString(row.name),
+      sanitizedRuby: row.ruby ? sanitizeString(row.ruby) : "",
+      sanitizedProp: row.prop.map((x: number) => sanitizeString(yugioh.JA_ID_TO_MONSTER_PROP[x])),
+    });
   }
 
   return monsters;
@@ -79,4 +91,26 @@ export function formatCardText(text: string) {
       </div>
     </>
   );
+}
+
+export function getDeckURL(deck: Monster[]) {
+  const cardIds = deck.map((monster) => monster.id).sort((a, b) => a - b);
+
+  if (cardIds.length === 0) {
+    return "/apps/yugioh-small-world-searcher/";
+  } else {
+    return `/apps/yugioh-small-world-searcher/?card_id=${encodeURIComponent(cardIds.join(","))}`;
+  }
+}
+
+export function postDeck(deck: Monster[]) {
+  const app_url = getDeckURL(deck);
+
+  let text = "";
+  text += "【遊戯王 - スモールワールド検索ツール】\n";
+  text += app_url + "\n\n";
+  text += "#遊戯王 #マスターデュエル";
+
+  const x_url = `https://x.com/intent/tweet?text=${encodeURIComponent(text)}`;
+  window.open(x_url, "_blank");
 }

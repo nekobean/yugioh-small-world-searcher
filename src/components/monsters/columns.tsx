@@ -50,13 +50,16 @@ export function createColumns(
       );
     },
     filterFn: (row, _, filterValue) => {
-      const keywords = filterValue.split(" ").map(sanitizeString).filter(Boolean);
+      const keywords = filterValue.split(" ").map(sanitizeString).filter(Boolean) as string[];
+      const target = [
+        row.original.sanitizedName,
+        row.original.sanitizedRuby,
+        row.original.race,
+        row.original.attr,
+        ...row.original.sanitizedProp,
+      ];
 
-      return keywords.every(
-        (keyword: string) =>
-          row.original.sanitizedName.includes(keyword) ||
-          row.original.sanitizedRuby.includes(keyword)
-      );
+      return keywords.every((keyword) => target.some((value) => value.includes(keyword)));
     },
   });
 
