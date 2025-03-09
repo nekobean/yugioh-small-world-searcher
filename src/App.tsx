@@ -8,6 +8,7 @@ import { AdvertisementSection } from "./pages/adsense-section";
 import { AddMonsterSection } from "./pages/add-monster-section";
 import { MiddleMonsterSection } from "./pages/middle-monster-section";
 import { ResultGraphSection } from "./pages/result-graph-section";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 function App() {
   const [monsters, setMonsters] = useState<Monster[]>([]);
@@ -69,14 +70,34 @@ function App() {
         <div className="mx-auto px-6 py-12 container">
           <Jumbotron />
           <AdvertisementSection className="mt-6" />
-          <AddMonsterSection className="mt-6" monsters={monsters} addMonster={addMonster} />
+
+          <Tabs
+            defaultValue="add-monster"
+            className="bg-blue-600 shadow-2xl mt-6 p-8 rounded-2xl text-white"
+          >
+            <TabsList className="space-x-2">
+              <TabsTrigger value="add-monster" className="text-2xl">
+                モンスターの追加
+              </TabsTrigger>
+              <TabsTrigger value="middle-monster" className="text-2xl">
+                中継ぎカードの検索
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="add-monster">
+              <AddMonsterSection monsters={monsters} addMonster={addMonster} />
+            </TabsContent>
+            <TabsContent value="middle-monster">
+              <MiddleMonsterSection
+                className="mt-6"
+                monsters={monsters}
+                deck={deck}
+                addMonster={addMonster}
+              />
+            </TabsContent>
+          </Tabs>
+
           <DeckSection className="mt-6" deck={deck} deleteMonster={deleteMonster} />
-          <MiddleMonsterSection
-            className="mt-6"
-            monsters={monsters}
-            deck={deck}
-            addMonster={addMonster}
-          />
+
           <ResultGraphSection className="mt-6" deck={deck} />
         </div>
       </main>

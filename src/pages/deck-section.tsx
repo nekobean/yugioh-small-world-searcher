@@ -15,12 +15,7 @@ const DeckSection: React.FC<DeckSectionProps> = ({ className, deck, deleteMonste
   const deleteMonsterColumns = createColumns(deleteMonster, "deck");
 
   return (
-    <section
-      className={cn(
-        "bg-gradient-to-r bg-blue-600 shadow-2xl backdrop-blur-lg p-8 rounded-2xl text-white",
-        className
-      )}
-    >
+    <section className={cn("bg-blue-600 shadow-2xl p-8 rounded-2xl text-white", className)}>
       <h2 className="font-bold text-3xl">デッキ</h2>
 
       <DataTable columns={deleteMonsterColumns} data={deck} className="mt-3" type="deck" />

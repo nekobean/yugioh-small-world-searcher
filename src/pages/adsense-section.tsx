@@ -6,12 +6,7 @@ interface AdvertisementSectionProps {
 
 const AdvertisementSection: React.FC<AdvertisementSectionProps> = ({ className }) => {
   return (
-    <section
-      className={cn(
-        "bg-blue-600 shadow-2xl backdrop-blur-lg p-8 rounded-2xl text-white",
-        className
-      )}
-    >
+    <section className={cn("bg-blue-600 shadow-2xl p-8 rounded-2xl text-white", className)}>
       <p className="text-lg">
         マスターデュエルを始める、または最終ログインから30日経過してる方、よかったらフォローお願いします。(
         <a

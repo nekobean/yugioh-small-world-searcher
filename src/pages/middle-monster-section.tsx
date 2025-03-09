@@ -1,6 +1,5 @@
 import React from "react";
 
-import { cn } from "@/lib/utils";
 import { isConnected, Monster } from "@/lib/dataloader";
 import { DataTable } from "@/components/monsters/data-table";
 import { createColumns } from "@/components/monsters/columns";
@@ -47,14 +46,7 @@ const MiddleMonsterSection: React.FC<MiddleMonsterSectionProps> = ({
   }, [deck]);
 
   return (
-    <section
-      className={cn(
-        "bg-gradient-to-r bg-blue-600 shadow-2xl backdrop-blur-lg p-8 rounded-2xl text-white",
-        className
-      )}
-    >
-      <h2 className="font-bold text-3xl">中継ぎカードの検索</h2>
-
+    <section>
       <p className="mt-3">
         選択した複数のカードを相互に行き来可能にする中継ぎカードを検索し、デッキに追加できます。
       </p>

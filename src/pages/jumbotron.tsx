@@ -2,7 +2,7 @@ import packageJson from "../../package.json";
 
 const Jumbotron = () => {
   return (
-    <section className="bg-blue-600 shadow-2xl backdrop-blur-lg p-8 rounded-2xl text-white">
+    <section className="bg-blue-600 shadow-2xl p-8 rounded-2xl text-white">
       {/* Title */}
       <div className="flex">
         <img src="/small_world.png" alt="Small World" className="mr-3 w-12 aspect-auto" />

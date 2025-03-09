@@ -1,6 +1,5 @@
 import React from "react";
 
-import { cn } from "@/lib/utils";
 import { Monster } from "@/lib/dataloader";
 import { DataTable } from "@/components/monsters/data-table";
 import { createColumns } from "@/components/monsters/columns";
@@ -11,11 +10,7 @@ interface AddMonsterSectionProps extends React.HTMLAttributes<HTMLTableSectionEl
   addMonster: (card_id: number | number[]) => void;
 }
 
-const AddMonsterSection: React.FC<AddMonsterSectionProps> = ({
-  className,
-  monsters,
-  addMonster,
-}) => {
+const AddMonsterSection: React.FC<AddMonsterSectionProps> = ({ monsters, addMonster }) => {
   const [shortcutMonsters, setShortcutMonsters] = React.useState<Monster[]>([]);
   const addMonsterColumns = createColumns(addMonster, "add");
   const shortcutMonsterIds = [
@@ -30,14 +25,7 @@ const AddMonsterSection: React.FC<AddMonsterSectionProps> = ({
   }, [monsters]);
 
   return (
-    <section
-      className={cn(
-        "bg-gradient-to-r bg-blue-600 shadow-2xl backdrop-blur-lg p-8 rounded-2xl text-white",
-        className
-      )}
-    >
-      <h2 className="font-bold text-3xl">モンスターの追加</h2>
-
+    <section>
       <ul className="mt-3 text-lg list-disc list-inside">
         <li>
           カード名を入力すると、絞り込みが行えます。「追加」ボタンをクリックして、デッキに追加してください。（例:
