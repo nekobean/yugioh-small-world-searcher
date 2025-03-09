@@ -3,16 +3,14 @@ import React from "react";
 import { cn } from "@/lib/utils";
 import { Monster, postDeck } from "@/lib/dataloader";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+
+import SmallWorldGraph from "@/components/graph/small-world-graph";
 
 interface ResultGraphSectionProps extends React.HTMLAttributes<HTMLTableSectionElement> {
   deck: Monster[];
 }
 
 const ResultGraphSection: React.FC<ResultGraphSectionProps> = ({ className, deck }) => {
-  const [showEdgeLabel, setShowEdgeLabel] = React.useState(false);
-  const [showCardImage, setShowCardImage] = React.useState(true);
-
   return (
     <section
       className={cn(
@@ -32,32 +30,8 @@ const ResultGraphSection: React.FC<ResultGraphSectionProps> = ({ className, deck
         </li>
       </ul>
 
-      {/* オプション */}
-      <div className="flex space-x-2 mt-6">
-        <div className="flex items-center space-x-2">
-          <Checkbox id="show-edge-label" className="bg-white" />
-          <label
-            htmlFor="show-edge-label"
-            className="peer-disabled:opacity-70 font-medium text-sm leading-none peer-disabled:cursor-not-allowed"
-          >
-            辺のラベルを表示
-          </label>
-        </div>
-        <div className="flex items-center space-x-2">
-          <Checkbox id="show-edge-label" className="bg-white" />
-          <label
-            htmlFor="show-edge-label"
-            className="peer-disabled:opacity-70 font-medium text-sm leading-none peer-disabled:cursor-not-allowed"
-          >
-            カード画像を表示
-          </label>
-        </div>
-      </div>
-
       {/* グラフ */}
-      <div className="bg-white mt-3 border-8 border-emerald-400 rounded-md w-full max-h-[800px] aspect-video">
-        <div id="cy"></div>
-      </div>
+      <SmallWorldGraph deck={deck} />
 
       {/* アクション */}
       <div className="space-y-2 mt-3">

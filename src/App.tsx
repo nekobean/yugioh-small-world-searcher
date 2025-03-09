@@ -1,4 +1,3 @@
-// import { Button } from "@/components/ui/button";
 import { Jumbotron } from "@/pages/jumbotron";
 import { DeckSection } from "@/pages/deck-section";
 import { useNavigate } from "react-router-dom";
@@ -66,7 +65,7 @@ function App() {
 
   return (
     <>
-      <main className="bg-gray-50 w-full h-screen">
+      <main className="bg-gray-50 w-full min-w-[800px]">
         <div className="mx-auto px-6 py-12 container">
           <Jumbotron />
           <AdvertisementSection className="mt-6" />

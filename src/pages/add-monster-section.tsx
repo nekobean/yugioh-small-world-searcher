@@ -65,7 +65,7 @@ const AddMonsterSection: React.FC<AddMonsterSectionProps> = ({
           {shortcutMonsters.map((monster) => (
             <Avatar
               key={monster.id}
-              className="shadow-black hover:shadow-md hover:scale-120 transition-transform duration-100"
+              className="hover:shadow-md rounded-md size-12 hover:scale-120 transition-transform duration-100"
               onClick={() => addMonster(monster.id)}
             >
               <AvatarImage src={`/images/${monster.id}.jpg`} alt={monster.name} />

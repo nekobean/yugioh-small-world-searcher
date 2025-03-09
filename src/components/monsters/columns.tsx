@@ -18,7 +18,7 @@ export function createColumns(
       header: "",
       cell: ({ row }) => {
         return (
-          <Avatar>
+          <Avatar className="rounded-md size-12">
             <AvatarImage src={`/images/${row.original.id}.jpg`} alt={row.original.name} />
             <AvatarFallback className="bg-gray-300 rounded-md size-12"></AvatarFallback>
           </Avatar>

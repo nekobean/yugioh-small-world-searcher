@@ -55,7 +55,7 @@ export function DataTable<TData, TValue>({
           <label htmlFor="card-search" className="text-sm">
             {type === "add"
               ? "モンスター名を入力（読み仮名でも可）"
-              : "キーワードを入力 (カード名、種族、属性、種類 / 空白区切りで複数指定可)"}
+              : "カード名、種族、属性、種類などのキーワードを入力 (空白区切りで複数指定可)"}
           </label>
           <div className="relative max-w-sm">
             <Input
