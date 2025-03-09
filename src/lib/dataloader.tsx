@@ -153,7 +153,7 @@ export function getSearchPatterns(deck: Monster[]): SearchPath[] {
   }
 
   // サーチ元、サーチ先でグループ化する。
-  const patternMap = new Map<string, SearchPath>();
+  const searchPathMap = new Map<string, SearchPath>();
   for (const firstMonster of deck) {
     const secondMonsters = adjacencyList.get(firstMonster) ?? new Set();
 
@@ -162,18 +162,18 @@ export function getSearchPatterns(deck: Monster[]): SearchPath[] {
 
       for (const thirdMonster of thirdMonsters) {
         const key = `${firstMonster.id}-${thirdMonster.id}`;
-        if (!patternMap.has(key)) {
-          patternMap.set(key, {
+        if (!searchPathMap.has(key)) {
+          searchPathMap.set(key, {
             source: firstMonster,
             middles: [],
             target: thirdMonster,
           });
         }
 
-        patternMap.get(key)!.middles.push(secondMonster);
+        searchPathMap.get(key)!.middles.push(secondMonster);
       }
     }
   }
 
-  return Array.from(patternMap.values());
+  return Array.from(searchPathMap.values());
 }

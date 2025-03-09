@@ -10,6 +10,7 @@ import { MiddleMonsterSection } from "@/pages/middle-monster-section";
 import { ResultGraphSection } from "@/pages/result-graph-section";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ResultMatrixSection } from "@/pages/result-matrix-section";
+import { ResultTableSection } from "@/pages/result-table-section";
 
 function App() {
   const [monsters, setMonsters] = useState<Monster[]>([]);
@@ -103,7 +104,7 @@ function App() {
 
           {/* カード追加 */}
           <Tabs
-            defaultValue="result-graph"
+            defaultValue="result-table"
             className="bg-blue-600 shadow-2xl mt-6 p-8 rounded-2xl text-white"
           >
             <TabsList className="space-x-2">
@@ -123,7 +124,9 @@ function App() {
             <TabsContent value="result-matrix">
               <ResultMatrixSection deck={deck} />
             </TabsContent>
-            <TabsContent value="result-table"></TabsContent>
+            <TabsContent value="result-table">
+              <ResultTableSection deck={deck} />
+            </TabsContent>
           </Tabs>
         </div>
       </main>

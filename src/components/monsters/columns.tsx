@@ -4,7 +4,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { Button } from "@/components/ui/button";
 import { formatCardText, Monster, officialUrl, sanitizeString } from "@/lib/dataloader";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { DataTableColumnHeader } from "@/components/monsters/column-header";
+import { DataTableColumnHeader } from "@/components/ui/column-header";
 
 export function createColumns(
   buttonAction: (card_id: number) => void,

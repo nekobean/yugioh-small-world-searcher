@@ -7,10 +7,10 @@ import { cn } from "@/lib/utils";
 
 interface SearchMatrixProps extends React.HTMLAttributes<HTMLTableElement> {
   deck: Monster[];
-  searchPatterns: SearchPath[];
+  searchPaths: SearchPath[];
 }
 
-const SearchMatrix: React.FC<SearchMatrixProps> = ({ deck, searchPatterns, className }) => (
+const SearchMatrix: React.FC<SearchMatrixProps> = ({ deck, searchPaths, className }) => (
   <table
     className={cn(
       "bg-white [&_th,&_td]:p-1 [&_th,&_td]:border-2 [&_th,&_td]:border-gray-500 text-black [&_th,&_td]:text-center",
@@ -45,10 +45,10 @@ const SearchMatrix: React.FC<SearchMatrixProps> = ({ deck, searchPatterns, class
           )}
           <th>{srcMonster.name}</th>
           {deck.map((dstMonster) => {
-            const pattern = searchPatterns.find(
+            const path = searchPaths.find(
               (path) => path.source.id === srcMonster.id && path.target.id === dstMonster.id
             );
-            return pattern ? (
+            return path ? (
               <td key={dstMonster.id}>
                 <TooltipProvider>
                   <Tooltip>
@@ -57,7 +57,7 @@ const SearchMatrix: React.FC<SearchMatrixProps> = ({ deck, searchPatterns, class
                     </TooltipTrigger>
                     <TooltipContent>
                       <ul>
-                        {pattern.middles.map((monster) => (
+                        {path.middles.map((monster) => (
                           <li key={monster.id} className="text-lg">
                             {monster.name}
                           </li>
@@ -82,7 +82,7 @@ interface ResultMatrixSectionProps extends React.HTMLAttributes<HTMLTableSection
 }
 
 const ResultMatrixSection: React.FC<ResultMatrixSectionProps> = ({ deck }) => {
-  const searchPatterns = getSearchPatterns(deck);
+  const searchPaths = getSearchPatterns(deck);
 
   return (
     <section>
@@ -93,7 +93,7 @@ const ResultMatrixSection: React.FC<ResultMatrixSectionProps> = ({ deck }) => {
         <li>○にマウスカーソルを合わせると、中継ぎカードが表示されます。</li>
       </ul>
 
-      <SearchMatrix deck={deck} searchPatterns={searchPatterns} className="mt-3" />
+      <SearchMatrix deck={deck} searchPaths={searchPaths} className="mt-3" />
     </section>
   );
 };

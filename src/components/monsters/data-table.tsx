@@ -17,7 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { DataTablePagination } from "@/components/monsters/pagenation";
+import { DataTablePagination } from "@/components/ui/pagenation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
