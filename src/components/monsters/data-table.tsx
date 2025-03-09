@@ -24,7 +24,7 @@ import { Button } from "@/components/ui/button";
 interface DataTableProps<TData, TValue> extends React.HTMLAttributes<HTMLDivElement> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  type: "add" | "deck" | "relay";
+  type: "add" | "deck" | "middle";
 }
 
 export function DataTable<TData, TValue>({

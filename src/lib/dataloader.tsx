@@ -114,3 +114,45 @@ export function postDeck(deck: Monster[]) {
   const x_url = `https://x.com/intent/tweet?text=${encodeURIComponent(text)}`;
   window.open(x_url, "_blank");
 }
+
+export function isConnected(a: Monster, b: Monster) {
+  let same = 0;
+  let connection;
+  if (a.level === b.level) {
+    connection = {
+      label: `レベル${a.level}`,
+      color: "#3157e0",
+    };
+    same++;
+  }
+  if (a.atk === b.atk) {
+    connection = {
+      label: `攻撃力${a.atk}`,
+      color: "#FA7070",
+    };
+    same++;
+  }
+  if (a.def === b.def) {
+    connection = {
+      label: `守備力${a.def}`,
+      color: "darkgreen",
+    };
+    same++;
+  }
+  if (a.attr === b.attr) {
+    connection = {
+      label: a.attr,
+      color: "#FD841F",
+    };
+    same++;
+  }
+  if (a.race === b.race) {
+    connection = {
+      label: a.race,
+      color: "#5ed1b2",
+    };
+    same++;
+  }
+
+  return same == 1 ? connection : null;
+}

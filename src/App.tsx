@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { getDeckURL, loadMonsterList, Monster } from "@/lib/dataloader";
 import { AdvertisementSection } from "./pages/adsense-section";
 import { AddMonsterSection } from "./pages/add-monster-section";
-import { RelayMonsterSection } from "./pages/relay-monster-section";
+import { MiddleMonsterSection } from "./pages/middle-monster-section";
 import { ResultGraphSection } from "./pages/result-graph-section";
 
 function App() {
@@ -71,7 +71,12 @@ function App() {
           <AdvertisementSection className="mt-6" />
           <AddMonsterSection className="mt-6" monsters={monsters} addMonster={addMonster} />
           <DeckSection className="mt-6" deck={deck} deleteMonster={deleteMonster} />
-          <RelayMonsterSection className="mt-6" monsters={monsters} addMonster={addMonster} />
+          <MiddleMonsterSection
+            className="mt-6"
+            monsters={monsters}
+            deck={deck}
+            addMonster={addMonster}
+          />
           <ResultGraphSection className="mt-6" deck={deck} />
         </div>
       </main>
