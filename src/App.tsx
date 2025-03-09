@@ -4,11 +4,12 @@ import { useNavigate } from "react-router-dom";
 import "./App.css";
 import { useEffect, useState } from "react";
 import { getDeckURL, loadMonsterList, Monster } from "@/lib/dataloader";
-import { AdvertisementSection } from "./pages/adsense-section";
-import { AddMonsterSection } from "./pages/add-monster-section";
-import { MiddleMonsterSection } from "./pages/middle-monster-section";
-import { ResultGraphSection } from "./pages/result-graph-section";
+import { AdvertisementSection } from "@/pages/adsense-section";
+import { AddMonsterSection } from "@/pages/add-monster-section";
+import { MiddleMonsterSection } from "@/pages/middle-monster-section";
+import { ResultGraphSection } from "@/pages/result-graph-section";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ResultMatrixSection } from "@/pages/result-matrix-section";
 
 function App() {
   const [monsters, setMonsters] = useState<Monster[]>([]);
@@ -71,6 +72,7 @@ function App() {
           <Jumbotron />
           <AdvertisementSection className="mt-6" />
 
+          {/* カード追加 */}
           <Tabs
             defaultValue="add-monster"
             className="bg-blue-600 shadow-2xl mt-6 p-8 rounded-2xl text-white"
@@ -96,9 +98,33 @@ function App() {
             </TabsContent>
           </Tabs>
 
+          {/* デッキ */}
           <DeckSection className="mt-6" deck={deck} deleteMonster={deleteMonster} />
 
-          <ResultGraphSection className="mt-6" deck={deck} />
+          {/* カード追加 */}
+          <Tabs
+            defaultValue="result-graph"
+            className="bg-blue-600 shadow-2xl mt-6 p-8 rounded-2xl text-white"
+          >
+            <TabsList className="space-x-2">
+              <TabsTrigger value="result-graph" className="text-2xl">
+                相関グラフ
+              </TabsTrigger>
+              <TabsTrigger value="result-matrix" className="text-2xl">
+                早見表 (行列)
+              </TabsTrigger>
+              <TabsTrigger value="result-table" className="text-2xl">
+                早見表 (テーブル)
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="result-graph">
+              <ResultGraphSection deck={deck} />
+            </TabsContent>
+            <TabsContent value="result-matrix">
+              <ResultMatrixSection deck={deck} />
+            </TabsContent>
+            <TabsContent value="result-table"></TabsContent>
+          </Tabs>
         </div>
       </main>
     </>

@@ -116,43 +116,64 @@ export function postDeck(deck: Monster[]) {
 }
 
 export function isConnected(a: Monster, b: Monster) {
-  let same = 0;
-  let connection;
-  if (a.level === b.level) {
-    connection = {
-      label: `レベル${a.level}`,
-      color: "#3157e0",
-    };
-    same++;
-  }
-  if (a.atk === b.atk) {
-    connection = {
-      label: `攻撃力${a.atk}`,
-      color: "#FA7070",
-    };
-    same++;
-  }
-  if (a.def === b.def) {
-    connection = {
-      label: `守備力${a.def}`,
-      color: "darkgreen",
-    };
-    same++;
-  }
-  if (a.attr === b.attr) {
-    connection = {
-      label: a.attr,
-      color: "#FD841F",
-    };
-    same++;
-  }
-  if (a.race === b.race) {
-    connection = {
-      label: a.race,
-      color: "#5ed1b2",
-    };
-    same++;
+  const numCommon =
+    Number(a.level === b.level) +
+    Number(a.atk === b.atk) +
+    Number(a.def === b.def) +
+    Number(a.attr === b.attr) +
+    Number(a.race === b.race);
+
+  return numCommon == 1;
+}
+
+export interface SearchPath {
+  source: Monster;
+  middles: Monster[];
+  target: Monster;
+}
+
+export function getSearchPatterns(deck: Monster[]): SearchPath[] {
+  const pairs = deck.flatMap((v, i) => deck.slice(i + 1).map((w) => [v, w]));
+
+  // 隣接リストを作成する。
+  const adjacencyList = new Map<Monster, Set<Monster>>();
+  for (const [a, b] of pairs) {
+    if (!isConnected(a, b)) {
+      continue;
+    }
+
+    if (!adjacencyList.has(a)) {
+      adjacencyList.set(a, new Set());
+    }
+    if (!adjacencyList.has(b)) {
+      adjacencyList.set(b, new Set());
+    }
+    adjacencyList.get(a)!.add(b);
+    adjacencyList.get(b)!.add(a);
   }
 
-  return same == 1 ? connection : null;
+  // サーチ元、サーチ先でグループ化する。
+  const patternMap = new Map<string, SearchPath>();
+  for (const firstMonster of deck) {
+    const secondMonsters = adjacencyList.get(firstMonster) ?? new Set();
+
+    for (const secondMonster of secondMonsters) {
+      const thirdMonsters = adjacencyList.get(secondMonster) ?? new Set();
+
+      for (const thirdMonster of thirdMonsters) {
+        const key = `${firstMonster.id}-${thirdMonster.id}`;
+        if (!patternMap.has(key)) {
+          patternMap.set(key, {
+            source: firstMonster,
+            middles: [],
+            target: thirdMonster,
+          });
+        }
+
+        patternMap.get(key)!.middles.push(secondMonster);
+      }
+    }
+  }
+
+  return Array.from(patternMap.values());
 }

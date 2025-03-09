@@ -3,10 +3,40 @@ import React from "react";
 import Cytoscape, { ElementDefinition, StylesheetStyle } from "cytoscape";
 import dagre, { DagreLayoutOptions } from "cytoscape-dagre";
 import { Checkbox } from "@/components/ui/checkbox";
-import { isConnected, Monster } from "@/lib/dataloader";
+import { isConnected, Monster, postDeck } from "@/lib/dataloader";
 import CytoscapeComponent from "react-cytoscapejs";
+import { Button } from "@/components/ui/button";
 
 Cytoscape.use(dagre);
+
+function getEdgeLabelAndColor(a: Monster, b: Monster) {
+  if (a.level === b.level) {
+    return {
+      label: `レベル${a.level}`,
+      color: "#3157e0",
+    };
+  } else if (a.atk === b.atk) {
+    return {
+      label: `攻撃力${a.atk}`,
+      color: "#FA7070",
+    };
+  } else if (a.def === b.def) {
+    return {
+      label: `守備力${a.def}`,
+      color: "darkgreen",
+    };
+  } else if (a.attr === b.attr) {
+    return {
+      label: a.attr,
+      color: "#FD841F",
+    };
+  } else {
+    return {
+      label: a.race,
+      color: "#5ed1b2",
+    };
+  }
+}
 
 function createElements(deck: Monster[]) {
   let elements: ElementDefinition[] = [];
@@ -22,15 +52,15 @@ function createElements(deck: Monster[]) {
 
   // 辺を追加する。
   for (const [a, b] of pairs) {
-    const connection = isConnected(a, b);
-    if (connection) {
+    if (isConnected(a, b)) {
+      const { label, color } = getEdgeLabelAndColor(a, b);
       elements.push({
         data: {
-          id: `${a.id}_${b.id}`,
+          id: `${a.id}-${b.id}`,
           source: a.id,
           target: b.id,
-          label: connection.label,
-          color: connection.color,
+          label: label,
+          color: color,
         },
       });
     }
@@ -43,33 +73,33 @@ function createElements(deck: Monster[]) {
 const layoutOptions: DagreLayoutOptions = {
   name: "dagre",
   padding: 50,
-  spacingFactor: 1.2,
+  spacingFactor: 1.5,
+  fit: false,
 };
 
-// Node のスタイル
-const nodeStyle: StylesheetStyle = {
-  selector: "node",
-  style: {
-    height: 80,
-    width: 80,
-    shape: "ellipse",
-    content: "data(monster.name)",
-    "border-color": "black",
-    "border-width": 2,
-    "text-valign": "bottom",
-    "text-halign": "center",
-    "text-margin-y": 8,
-    "text-background-padding": "3px",
-    "text-background-color": "white",
-    "text-background-opacity": 0.8,
-    "font-size": "20px",
-    "font-weight": "bold",
-    "background-image": "data(image)",
-    "background-fit": "contain",
-  },
-};
+function createStylesheet(showEdgeLabel: boolean) {
+  const nodeStyle: StylesheetStyle = {
+    selector: "node",
+    style: {
+      height: 80,
+      width: 80,
+      shape: "ellipse",
+      content: "data(monster.name)",
+      "border-color": "black",
+      "border-width": 2,
+      "text-valign": "bottom",
+      "text-halign": "center",
+      "text-margin-y": 8,
+      "text-background-padding": "3px",
+      "text-background-color": "white",
+      "text-background-opacity": 0.8,
+      "font-weight": "bold",
+      "background-image": "data(image)",
+      "background-fit": "contain",
+      "font-size": "24px",
+    },
+  };
 
-function createEdgeStyle(showEdgeLabel: boolean) {
   const edgeStyle: StylesheetStyle = {
     selector: "edge",
     style: {
@@ -79,11 +109,19 @@ function createEdgeStyle(showEdgeLabel: boolean) {
       "text-background-padding": "3px",
       "text-background-color": "white",
       "text-background-opacity": 0.8,
-      "font-size": "16px",
+      "font-size": "18px",
     },
   };
 
-  return edgeStyle;
+  return [nodeStyle, edgeStyle];
+}
+
+function calcFontSize(cy: Cytoscape.Core) {
+  const zoomFactor = 1 / cy.zoom();
+  const nodeFontSize = zoomFactor * 16;
+  const edgeFontSize = zoomFactor * 14;
+
+  return { nodeFontSize, edgeFontSize };
 }
 
 interface SmallWorldGraphProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -92,9 +130,10 @@ interface SmallWorldGraphProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const SmallWorldGraph: React.FC<SmallWorldGraphProps> = ({ deck }) => {
   const [showEdgeLabel, setShowEdgeLabel] = React.useState(false);
-  const [showNodeImage, setShowNodeImage] = React.useState(true);
   const elements = createElements(deck);
-  const edgeStyles = createEdgeStyle(showEdgeLabel);
+  const cyRef = React.useRef<Cytoscape.Core>(null);
+
+  const stylesheet = createStylesheet(showEdgeLabel);
 
   return (
     <div>
@@ -115,21 +154,6 @@ const SmallWorldGraph: React.FC<SmallWorldGraphProps> = ({ deck }) => {
             辺のラベルを表示
           </label>
         </div>
-        {/* カード画像を表示 */}
-        {/* <div className="flex items-center space-x-2">
-          <Checkbox
-            id="show-node-image"
-            className="bg-white"
-            checked={showNodeImage}
-            onCheckedChange={(checked) => setShowNodeImage(!!checked)}
-          />
-          <label
-            htmlFor="show-node-image"
-            className="peer-disabled:opacity-70 font-medium text-sm leading-none peer-disabled:cursor-not-allowed"
-          >
-            カード画像を表示
-          </label>
-        </div> */}
       </div>
 
       {/* グラフ */}
@@ -137,30 +161,39 @@ const SmallWorldGraph: React.FC<SmallWorldGraphProps> = ({ deck }) => {
         <CytoscapeComponent
           elements={elements}
           className="bg-white size-full"
-          stylesheet={[nodeStyle, edgeStyles]}
+          stylesheet={stylesheet}
           cy={(cy) => {
-            cy.on("add resize", () => {
+            if (!cyRef.current) {
+              cyRef.current = cy;
+            }
+
+            cy.on("add remove resize", () => {
               cy.layout(layoutOptions).run();
+              cy.fit(cy.elements(), 20);
             });
             cy.on("free", () => {
-              cy.fit();
-            });
-            cy.on("zoom", function () {
-              const zoomFactor = 1 / cy.zoom();
-              const nodeFontSize = zoomFactor * 20;
-              const edgeFontSize = zoomFactor * 16;
-              cy.style()
-                .selector("edge")
-                .style("font-size", String(nodeFontSize))
-                .selector("node")
-                .style("font-size", String(edgeFontSize))
-                .update();
+              cy.fit(cy.elements(), 20);
             });
           }}
           userZoomingEnabled={false}
           userPanningEnabled={false}
           maxZoom={1}
         />
+      </div>
+
+      {/* アクション */}
+      <div className="space-y-2 mt-3">
+        <div className="flex gap-2">
+          <Button>画像で保存する</Button>
+          <Button onClick={() => navigator.clipboard.writeText(window.location.href)}>
+            デッキの URL をコピー
+          </Button>
+          <Button onClick={() => postDeck(deck)}>デッキをツイート</Button>
+        </div>
+        <p className="text-lg">
+          URL をブラウザのお気に入りに登録するか、ツイートするなど覚えておくことで、その URL
+          にアクセスした際にデッキの状態が復元されます。
+        </p>
       </div>
     </div>
   );

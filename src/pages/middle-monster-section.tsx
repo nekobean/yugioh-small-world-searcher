@@ -30,7 +30,6 @@ interface MiddleMonsterSectionProps extends React.HTMLAttributes<HTMLTableSectio
 }
 
 const MiddleMonsterSection: React.FC<MiddleMonsterSectionProps> = ({
-  className,
   monsters,
   deck,
   addMonster,
