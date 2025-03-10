@@ -104,7 +104,7 @@ function App() {
 
           {/* カード追加 */}
           <Tabs
-            defaultValue="result-table"
+            defaultValue="result-graph"
             className="bg-blue-600 shadow-2xl mt-6 p-8 rounded-2xl text-white"
           >
             <TabsList className="space-x-2">

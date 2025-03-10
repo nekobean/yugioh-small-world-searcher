@@ -1,6 +1,6 @@
 import React from "react";
 
-import Cytoscape, { ElementDefinition, StylesheetStyle } from "cytoscape";
+import Cytoscape, { ElementDefinition, ExportStringOptions, StylesheetStyle } from "cytoscape";
 import dagre, { DagreLayoutOptions } from "cytoscape-dagre";
 import { Checkbox } from "@/components/ui/checkbox";
 import { isConnected, Monster, postDeck } from "@/lib/dataloader";
@@ -75,6 +75,10 @@ const layoutOptions: DagreLayoutOptions = {
   padding: 50,
   spacingFactor: 1.5,
   fit: false,
+};
+
+const exportStringOptions: ExportStringOptions = {
+  bg: "#ffffff",
 };
 
 function createStylesheet(showEdgeLabel: boolean) {
@@ -160,10 +164,7 @@ const SmallWorldGraph: React.FC<SmallWorldGraphProps> = ({ deck }) => {
           className="bg-white size-full"
           stylesheet={stylesheet}
           cy={(cy) => {
-            if (!cyRef.current) {
-              cyRef.current = cy;
-            }
-
+            cyRef.current = cy;
             cy.on("add remove resize", () => {
               cy.layout(layoutOptions).run();
               cy.fit(cy.elements(), 20);
@@ -181,7 +182,20 @@ const SmallWorldGraph: React.FC<SmallWorldGraphProps> = ({ deck }) => {
       {/* アクション */}
       <div className="space-y-2 mt-3">
         <div className="flex gap-2">
-          <Button>画像で保存する</Button>
+          <Button
+            disabled={!cyRef.current || deck.length === 0}
+            onClick={async () => {
+              if (cyRef.current) {
+                const pngData = cyRef.current.png(exportStringOptions);
+                const link = document.createElement("a");
+                link.href = pngData;
+                link.download = "small-world-graph.png";
+                link.click();
+              }
+            }}
+          >
+            画像で保存する
+          </Button>
           <Button onClick={() => navigator.clipboard.writeText(window.location.href)}>
             デッキの URL をコピー
           </Button>
