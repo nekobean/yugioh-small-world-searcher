@@ -3,12 +3,8 @@ import React from "react";
 import { isConnected, Monster } from "@/lib/dataloader";
 import { DataTable } from "@/components/monsters/data-table";
 import { createColumns } from "@/components/monsters/columns";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 
 function getMiddleMonsters(monsters: Monster[], endpointMonsters: Monster[]): Monster[] {
@@ -50,36 +46,43 @@ const MiddleMonsterSection: React.FC<MiddleMonsterSectionProps> = ({
         選択した複数のカードを相互に行き来可能にする中継ぎカードを検索し、デッキに追加できます。
       </p>
 
-      {/* Dropdown Menu */}
-      <div className="mt-1 text-black">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              カードを選択
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {deck.map((monsters) => {
-              return (
-                <DropdownMenuCheckboxItem
-                  key={monsters.id}
-                  checked={endpointMonsters.find((m) => m.id === monsters.id) !== undefined}
-                  onCheckedChange={(checked) => {
-                    if (checked) {
-                      setEndpointMonsters((prev) => [...prev, monsters]);
-                    } else {
-                      setEndpointMonsters((prev) =>
-                        prev.filter((monster) => monster.id !== monsters.id)
-                      );
-                    }
-                  }}
-                >
-                  {monsters.name}
-                </DropdownMenuCheckboxItem>
-              );
-            })}
-          </DropdownMenuContent>
-        </DropdownMenu>
+      {/* 行き来したいモンスター */}
+      <div className="mt-3">
+        <Popover>
+          <Button className="" variant="outline" asChild>
+            <PopoverTrigger className="text-black">行き来したいモンスターを選択</PopoverTrigger>
+          </Button>
+          <PopoverContent align="start" className="border-6 border-gray-200">
+            <div className="space-y-3 mt-1 rounded-md text-black">
+              {deck.map((monsters) => {
+                return (
+                  <div key={monsters.id} className="flex items-center space-x-2">
+                    <Checkbox
+                      id={`checkbox-${monsters.id}`}
+                      className="bg-white border-2 border-black"
+                      checked={endpointMonsters.find((m) => m.id === monsters.id) !== undefined}
+                      onCheckedChange={(checked) => {
+                        if (checked) {
+                          setEndpointMonsters((prev) => [...prev, monsters]);
+                        } else {
+                          setEndpointMonsters((prev) =>
+                            prev.filter((monster) => monster.id !== monsters.id)
+                          );
+                        }
+                      }}
+                    />
+                    <label
+                      htmlFor={`checkbox-${monsters.id}`}
+                      className="text-md leading-none select-none"
+                    >
+                      {monsters.name}
+                    </label>
+                  </div>
+                );
+              })}
+            </div>
+          </PopoverContent>
+        </Popover>
       </div>
 
       {/* Table */}

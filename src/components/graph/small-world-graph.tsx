@@ -143,14 +143,11 @@ const SmallWorldGraph: React.FC<SmallWorldGraphProps> = ({ deck }) => {
         <div className="flex items-center space-x-2">
           <Checkbox
             id="show-edge-label"
-            className="bg-white"
+            className="bg-white border-2 border-black"
             checked={showEdgeLabel}
             onCheckedChange={(checked) => setShowEdgeLabel(!!checked)}
           />
-          <label
-            htmlFor="show-edge-label"
-            className="peer-disabled:opacity-70 font-medium text-sm leading-none peer-disabled:cursor-not-allowed"
-          >
+          <label htmlFor="show-edge-label" className="font-medium text-sm leading-none select-none">
             辺のラベルを表示
           </label>
         </div>
