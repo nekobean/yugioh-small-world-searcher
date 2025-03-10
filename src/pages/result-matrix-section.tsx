@@ -27,7 +27,10 @@ const SearchMatrix: React.FC<SearchMatrixProps> = ({ deck, searchPaths, classNam
       <tr>
         {deck.map((card) => (
           <th key={card.name}>
-            <span style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}>
+            <span
+              style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
+              className="display-inline-block whitespace-pre"
+            >
               {card.name}
             </span>
           </th>
@@ -40,7 +43,12 @@ const SearchMatrix: React.FC<SearchMatrixProps> = ({ deck, searchPaths, classNam
         <tr key={srcMonster.name}>
           {i === 0 && (
             <th rowSpan={deck.length}>
-              <span style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}>サーチ元</span>
+              <span
+                style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
+                className="display-inline-block whitespace-pre"
+              >
+                サーチ元
+              </span>
             </th>
           )}
           <th>{srcMonster.name}</th>
