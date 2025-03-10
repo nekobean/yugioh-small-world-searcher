@@ -11,6 +11,7 @@ import { ResultGraphSection } from "@/pages/result-graph-section";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ResultMatrixSection } from "@/pages/result-matrix-section";
 import { ResultTableSection } from "@/pages/result-table-section";
+import { RelatedToolsSection } from "./pages/related-tools-section";
 
 function App() {
   const [monsters, setMonsters] = useState<Monster[]>([]);
@@ -72,6 +73,7 @@ function App() {
         <div className="mx-auto px-6 py-12 container">
           <Jumbotron />
           <AdvertisementSection className="mt-6" />
+          <RelatedToolsSection className="mt-6" />
 
           {/* カード追加 */}
           <Tabs
