@@ -76,10 +76,10 @@ const MonsterFilter: React.FC<MonsterFilterProps> = ({
 
 interface ResultTableSectionProps extends React.HTMLAttributes<HTMLTableSectionElement> {
   deck: Monster[];
+  searchPaths: SearchPath[];
 }
 
-const ResultTableSection: React.FC<ResultTableSectionProps> = ({ deck }) => {
-  const searchPaths = getSearchPatterns(deck);
+const ResultTableSection: React.FC<ResultTableSectionProps> = ({ deck, searchPaths }) => {
   const [sourceMonsters, setSourceMonsters] = React.useState<Monster[]>([]);
   const [middleMonsters, setMiddleMonsters] = React.useState<Monster[]>([]);
   const [targetMonsters, setTargetMonsters] = React.useState<Monster[]>([]);

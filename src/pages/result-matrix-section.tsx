@@ -2,7 +2,7 @@ import React from "react";
 import { Circle } from "lucide-react";
 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { getSearchPatterns, Monster, SearchPath } from "@/lib/dataloader";
+import { Monster, SearchPath } from "@/lib/dataloader";
 import { cn } from "@/lib/utils";
 
 interface SearchMatrixProps extends React.HTMLAttributes<HTMLTableElement> {
@@ -87,11 +87,10 @@ const SearchMatrix: React.FC<SearchMatrixProps> = ({ deck, searchPaths, classNam
 
 interface ResultMatrixSectionProps extends React.HTMLAttributes<HTMLTableSectionElement> {
   deck: Monster[];
+  searchPaths: SearchPath[];
 }
 
-const ResultMatrixSection: React.FC<ResultMatrixSectionProps> = ({ deck }) => {
-  const searchPaths = getSearchPatterns(deck);
-
+const ResultMatrixSection: React.FC<ResultMatrixSectionProps> = ({ deck, searchPaths }) => {
   return (
     <section>
       <ul className="mt-3 text-lg list-disc list-inside">

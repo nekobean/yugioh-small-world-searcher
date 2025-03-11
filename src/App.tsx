@@ -3,7 +3,7 @@ import { DeckSection } from "@/pages/deck-section";
 import { useNavigate } from "react-router-dom";
 import "./App.css";
 import { useEffect, useState } from "react";
-import { getDeckURL, loadMonsterList, Monster } from "@/lib/dataloader";
+import { getDeckURL, getSearchPatterns, loadMonsterList, Monster } from "@/lib/dataloader";
 import { AdvertisementSection } from "@/pages/adsense-section";
 import { AddMonsterSection } from "@/pages/add-monster-section";
 import { MiddleMonsterSection } from "@/pages/middle-monster-section";
@@ -67,6 +67,8 @@ function App() {
     }
   }, [deck]);
 
+  const searchPaths = getSearchPatterns(deck);
+
   return (
     <>
       <main className="bg-gray-50 w-full min-w-[800px]">
@@ -104,7 +106,7 @@ function App() {
           {/* デッキ */}
           <DeckSection className="mt-6" deck={deck} deleteMonster={deleteMonster} />
 
-          {/* カード追加 */}
+          {/* 結果 */}
           <Tabs
             defaultValue="result-graph"
             className="bg-blue-600 shadow-2xl mt-6 p-8 rounded-2xl text-white"
@@ -124,10 +126,10 @@ function App() {
               <ResultGraphSection deck={deck} />
             </TabsContent>
             <TabsContent value="result-matrix">
-              <ResultMatrixSection deck={deck} />
+              <ResultMatrixSection deck={deck} searchPaths={searchPaths} />
             </TabsContent>
             <TabsContent value="result-table">
-              <ResultTableSection deck={deck} />
+              <ResultTableSection deck={deck} searchPaths={searchPaths} />
             </TabsContent>
           </Tabs>
         </div>

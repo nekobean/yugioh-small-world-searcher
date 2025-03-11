@@ -134,10 +134,41 @@ interface SmallWorldGraphProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const SmallWorldGraph: React.FC<SmallWorldGraphProps> = ({ deck }) => {
   const [showEdgeLabel, setShowEdgeLabel] = React.useState(false);
-  const elements = createElements(deck);
   const cyRef = React.useRef<Cytoscape.Core>(null);
 
+  const elements = createElements(deck);
   const stylesheet = createStylesheet(showEdgeLabel);
+
+  React.useEffect(() => {
+    if (cyRef.current) {
+      const cy = cyRef.current;
+      cy.layout(layoutOptions).run();
+      cy.fit(cy.elements(), 20);
+    }
+  }, [deck]);
+
+  React.useEffect(() => {
+    if (cyRef.current) {
+      const cy = cyRef.current;
+
+      const handleResize = () => {
+        cy.layout(layoutOptions).run();
+        cy.fit(cy.elements(), 20);
+      };
+
+      const handleFree = () => {
+        cy.fit(cy.elements(), 20);
+      };
+
+      cy.on("resize", handleResize);
+      cy.on("free", handleFree);
+
+      return () => {
+        cy.off("resize", handleResize);
+        cy.off("free", handleFree);
+      };
+    }
+  }, [cyRef.current]);
 
   return (
     <div>
@@ -165,13 +196,6 @@ const SmallWorldGraph: React.FC<SmallWorldGraphProps> = ({ deck }) => {
           stylesheet={stylesheet}
           cy={(cy) => {
             cyRef.current = cy;
-            cy.on("add remove resize", () => {
-              cy.layout(layoutOptions).run();
-              cy.fit(cy.elements(), 20);
-            });
-            cy.on("free", () => {
-              cy.fit(cy.elements(), 20);
-            });
           }}
           userZoomingEnabled={false}
           userPanningEnabled={false}
