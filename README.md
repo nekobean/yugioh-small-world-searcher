@@ -2,8 +2,12 @@
 
 ## About
 
-Yu-Gi-Oh Small World Searcher generates patterns that can be searched by "[SmallWorld](https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=16555)".
-This application is available on [this site](https://pystyle.info/apps/yugioh-small-world-searcher/).
+The Yu-Gi-Oh! Small World Search is a tool that visualizes the cards in a deck that can be searched using "[SmallWorld](https://www.db.yugioh-card.com/yugiohdb/card_search.action?ope=2&cid=16555)".
+This application is available on [this web site](https://pystyle.info/apps/yugioh-small-world-searcher/).
+
+![スモールワールドのグラフ](doc/small-world-graph.png)
+
+![スモールワールドの行列](doc/small-world-matrix.png)
 
 ## Feature
 
