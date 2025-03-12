@@ -104,7 +104,7 @@ export function getDeckURL(deck: Monster[]) {
 }
 
 export function postDeck(deck: Monster[]) {
-  const app_url = getDeckURL(deck);
+  const app_url = "https://pystyle.info" + getDeckURL(deck);
 
   let text = "";
   text += "【遊戯王 - スモールワールド検索ツール】\n";

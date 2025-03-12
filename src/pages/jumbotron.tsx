@@ -5,7 +5,7 @@ const Jumbotron = () => {
     <section className="bg-blue-600 shadow-2xl p-8 rounded-2xl text-white">
       {/* Title */}
       <div className="flex">
-        <img src="/small_world.png" alt="Small World" className="mr-3 w-12 aspect-auto" />
+        <img src="small_world.png" alt="Small World" className="mr-3 w-12 aspect-auto" />
         <div>
           <h1 className="font-bold text-4xl">遊戯王 スモールワールド検索ツール</h1>
           <p className="mt-1 text-lg">

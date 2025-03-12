@@ -11,4 +11,8 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  base: "/apps/yugioh-small-world-searcher/",
+  build: {
+    outDir: "dist/apps/yugioh-small-world-searcher",
+  },
 });

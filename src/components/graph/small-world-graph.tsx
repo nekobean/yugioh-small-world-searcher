@@ -44,7 +44,7 @@ function createElements(deck: Monster[]) {
   // 点を追加する。
   for (const monster of deck) {
     elements.push({
-      data: { id: String(monster.id), monster: monster, image: `/images/${monster.id}.jpg` },
+      data: { id: String(monster.id), monster: monster, image: `images/${monster.id}.jpg` },
     });
   }
 
@@ -73,8 +73,9 @@ function createElements(deck: Monster[]) {
 const layoutOptions: DagreLayoutOptions = {
   name: "dagre",
   padding: 50,
-  spacingFactor: 1.5,
+  spacingFactor: 1.2,
   fit: false,
+  rankDir: "TB",
 };
 
 const exportStringOptions: ExportStringOptions = {
@@ -120,13 +121,13 @@ function createStylesheet(showEdgeLabel: boolean) {
   return [nodeStyle, edgeStyle];
 }
 
-function calcFontSize(cy: Cytoscape.Core) {
-  const zoomFactor = 1 / cy.zoom();
-  const nodeFontSize = zoomFactor * 16;
-  const edgeFontSize = zoomFactor * 14;
+// function calcFontSize(cy: Cytoscape.Core) {
+//   const zoomFactor = 1 / cy.zoom();
+//   const nodeFontSize = zoomFactor * 16;
+//   const edgeFontSize = zoomFactor * 14;
 
-  return { nodeFontSize, edgeFontSize };
-}
+//   return { nodeFontSize, edgeFontSize };
+// }
 
 interface SmallWorldGraphProps extends React.HTMLAttributes<HTMLDivElement> {
   deck: Monster[];
@@ -151,20 +152,20 @@ const SmallWorldGraph: React.FC<SmallWorldGraphProps> = ({ deck }) => {
     if (cyRef.current) {
       const cy = cyRef.current;
 
-      const handleResize = () => {
-        cy.layout(layoutOptions).run();
-        cy.fit(cy.elements(), 20);
-      };
+      // const handleResize = () => {
+      //   cy.layout(layoutOptions).run();
+      //   cy.fit(cy.elements(), 20);
+      // };
 
       const handleFree = () => {
         cy.fit(cy.elements(), 20);
       };
 
-      cy.on("resize", handleResize);
+      //cy.on("resize", handleResize);
       cy.on("free", handleFree);
 
       return () => {
-        cy.off("resize", handleResize);
+        //cy.off("resize", handleResize);
         cy.off("free", handleFree);
       };
     }
@@ -178,7 +179,7 @@ const SmallWorldGraph: React.FC<SmallWorldGraphProps> = ({ deck }) => {
         <div className="flex items-center space-x-2">
           <Checkbox
             id="show-edge-label"
-            className="bg-white border-2 border-black"
+            className="bg-white border-2 border-black size-5"
             checked={showEdgeLabel}
             onCheckedChange={(checked) => setShowEdgeLabel(!!checked)}
           />

@@ -1,8 +1,9 @@
 import { Jumbotron } from "@/pages/jumbotron";
 import { DeckSection } from "@/pages/deck-section";
 import { useNavigate } from "react-router-dom";
-import "./App.css";
 import { useEffect, useState } from "react";
+
+import "./App.css";
 import { getDeckURL, getSearchPatterns, loadMonsterList, Monster } from "@/lib/dataloader";
 import { AdvertisementSection } from "@/pages/adsense-section";
 import { AddMonsterSection } from "@/pages/add-monster-section";
@@ -38,7 +39,10 @@ function App() {
   }
 
   function parseURL() {
-    const params = new URLSearchParams(window.location.search);
+    let decodedURL = decodeURIComponent(decodeURIComponent(window.location.href));
+
+    const url = new URL(decodedURL);
+    const params = new URLSearchParams(url.search);
     const cardIdsParam = params.get("card_id");
     if (cardIdsParam) {
       const cardIds = cardIdsParam.split(",").map(Number);
@@ -52,7 +56,7 @@ function App() {
   }
 
   useEffect(() => {
-    loadMonsterList("/ja_monsters_20250225.json", setMonsters);
+    loadMonsterList("ja_monsters_20250225.json", setMonsters);
   }, []);
 
   useEffect(() => {
@@ -71,8 +75,8 @@ function App() {
 
   return (
     <>
-      <main className="bg-gray-50 w-full min-w-[800px]">
-        <div className="mx-auto px-6 py-12 container">
+      <main className="bg-gray-50 w-[1100px]">
+        <div className="mx-auto px-6 py-12 w-full">
           <Jumbotron />
           <AdvertisementSection className="mt-6" />
           <RelatedToolsSection className="mt-6" />
@@ -106,15 +110,14 @@ function App() {
           {/* デッキ */}
           <DeckSection className="mt-6" deck={deck} deleteMonster={deleteMonster} />
 
+          <ResultGraphSection deck={deck} />
+
           {/* 結果 */}
           <Tabs
-            defaultValue="result-graph"
+            defaultValue="result-matrix"
             className="bg-blue-600 shadow-2xl mt-6 p-8 rounded-2xl text-white"
           >
             <TabsList className="space-x-2">
-              <TabsTrigger value="result-graph" className="text-2xl">
-                相関グラフ
-              </TabsTrigger>
               <TabsTrigger value="result-matrix" className="text-2xl">
                 早見表 (行列)
               </TabsTrigger>
@@ -122,9 +125,6 @@ function App() {
                 早見表 (テーブル)
               </TabsTrigger>
             </TabsList>
-            <TabsContent value="result-graph">
-              <ResultGraphSection deck={deck} />
-            </TabsContent>
             <TabsContent value="result-matrix">
               <ResultMatrixSection deck={deck} searchPaths={searchPaths} />
             </TabsContent>

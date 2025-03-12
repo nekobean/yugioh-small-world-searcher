@@ -56,7 +56,7 @@ const AddMonsterSection: React.FC<AddMonsterSectionProps> = ({ monsters, addMons
               className="hover:shadow-md rounded-md size-12 hover:scale-120 transition-transform duration-100"
               onClick={() => addMonster(monster.id)}
             >
-              <AvatarImage src={`/images/${monster.id}.jpg`} alt={monster.name} />
+              <AvatarImage src={`images/${monster.id}.jpg`} alt={monster.name} />
               <AvatarFallback>{monster.name}</AvatarFallback>
             </Avatar>
           ))}

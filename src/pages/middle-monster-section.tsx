@@ -53,13 +53,13 @@ const MiddleMonsterSection: React.FC<MiddleMonsterSectionProps> = ({
             <PopoverTrigger className="text-black">行き来したいモンスターを選択</PopoverTrigger>
           </Button>
           <PopoverContent align="start" className="border-6 border-gray-200">
-            <div className="space-y-3 mt-1 rounded-md text-black">
+            <div className="space-y-4 mt-1 rounded-md text-black">
               {deck.map((monsters) => {
                 return (
                   <div key={monsters.id} className="flex items-center space-x-2">
                     <Checkbox
                       id={`checkbox-${monsters.id}`}
-                      className="bg-white border-2 border-black"
+                      className="bg-white border-2 border-black size-5"
                       checked={endpointMonsters.find((m) => m.id === monsters.id) !== undefined}
                       onCheckedChange={(checked) => {
                         if (checked) {

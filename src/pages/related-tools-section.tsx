@@ -17,7 +17,7 @@ const RelatedToolsSection: React.FC<RelatedToolsSectionProps> = ({ className }) 
           target="_blank"
         >
           <Avatar className="hover:shadow-md rounded-xl size-36 hover:scale-110 transition-transform duration-100">
-            <AvatarImage src="/yugioh-sec-calculator.png" />
+            <AvatarImage src="yugioh-sec-calculator.png" />
           </Avatar>
           <div className="mt-2 text-lg">連慄砲固定式計算ツール</div>
         </a>
@@ -28,7 +28,7 @@ const RelatedToolsSection: React.FC<RelatedToolsSectionProps> = ({ className }) 
           target="_blank"
         >
           <Avatar className="hover:shadow-md rounded-xl size-36 hover:scale-110 transition-transform duration-100">
-            <AvatarImage src="/yugioh-spirit-sculptor-searcher.png" />
+            <AvatarImage src="yugioh-spirit-sculptor-searcher.png" />
           </Avatar>
           <div className="mt-2 text-lg">魂の造形家検索ツール</div>
         </a>

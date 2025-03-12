@@ -1,6 +1,6 @@
 import React from "react";
 
-import { getSearchPatterns, Monster, SearchPath } from "@/lib/dataloader";
+import { Monster, SearchPath } from "@/lib/dataloader";
 import { SearchPathDataTable } from "@/components/paths/data-table";
 import { pathColumns } from "@/components/paths/columns";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -23,12 +23,12 @@ const MonsterFilter: React.FC<MonsterFilterProps> = ({
   checkboxIdPrefix,
 }) => {
   return (
-    <div className="space-y-3 mt-1 px-6 rounded-md w-1/3 text-black">
+    <div className="space-y-4 mt-1 px-6 rounded-md w-1/3 text-black">
       <div>{label}</div>
       <div className="flex items-center space-x-2">
         <Checkbox
           id={`${checkboxIdPrefix}-select-all`}
-          className="bg-white border-2 border-black"
+          className="bg-white border-2 border-black size-5"
           checked={
             selectedMonsters.length === deck.length ||
             (selectedMonsters.length > 0 && "indeterminate")
@@ -52,7 +52,7 @@ const MonsterFilter: React.FC<MonsterFilterProps> = ({
         <div key={monster.id} className="flex items-center space-x-2">
           <Checkbox
             id={`${checkboxIdPrefix}-${monster.id}`}
-            className="bg-white border-2 border-black"
+            className="bg-white border-2 border-black size-5"
             checked={selectedMonsters.some((m) => m.id === monster.id)}
             onCheckedChange={(checked) => {
               if (checked) {

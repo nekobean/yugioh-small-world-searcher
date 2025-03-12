@@ -19,7 +19,7 @@ const AdvertisementSection: React.FC<AdvertisementSectionProps> = ({ className }
         のコード: 1d07ee73)
       </p>
 
-      <img src="/md.png" className="mt-1" />
+      <img src="md.png" className="mt-1" />
     </section>
   );
 };

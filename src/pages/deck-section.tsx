@@ -5,6 +5,7 @@ import { Monster, postDeck } from "@/lib/dataloader";
 import { DataTable } from "@/components/monsters/data-table";
 import { createColumns } from "@/components/monsters/columns";
 import { Button } from "@/components/ui/button";
+import { Adsense } from "@ctrl/react-adsense";
 
 interface DeckSectionProps extends React.HTMLAttributes<HTMLTableSectionElement> {
   deck: Monster[];
@@ -35,6 +36,15 @@ const DeckSection: React.FC<DeckSectionProps> = ({ className, deck, deleteMonste
           URL をブラウザのお気に入りに登録するか、ツイートするなど覚えておくことで、その URL
           にアクセスした際にデッキの状態が復元されます。
         </p>
+      </div>
+
+      <div className="w-full pa-3">
+        <Adsense
+          client="ca-pub-9930040906284502"
+          slot="5331132271"
+          format="fluid"
+          layout="in-article"
+        />
       </div>
     </section>
   );

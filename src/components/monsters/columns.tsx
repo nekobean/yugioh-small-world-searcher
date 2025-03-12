@@ -19,7 +19,7 @@ export function createColumns(
       cell: ({ row }) => {
         return (
           <Avatar className="rounded-md size-12">
-            <AvatarImage src={`/images/${row.original.id}.jpg`} alt={row.original.name} />
+            <AvatarImage src={`images/${row.original.id}.jpg`} alt={row.original.name} />
             <AvatarFallback className="bg-gray-300 rounded-md size-12"></AvatarFallback>
           </Avatar>
         );
